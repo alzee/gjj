@@ -5,72 +5,33 @@
 {% block body %}
 	<div id="content" >
 		<div class="loginlogo"></div>
-		<div  id="loginForm" class="mdui-input-group mar-1-top">
+		<form  id="loginForm" class="mdui-input-group mar-1-top">
 			<input type="hidden" id="bindcode"  name="bindcode" value="oR0-rwFTNBPw5kqD6Vew2jA42mcs">
 			<div class="mdui-input-row box box-align-c">
 				<div class=" fa fa-user" style="color:#00A1EA;width:2em"></div>
 				<div class="box-f1">
-					<input id="loginacc"  type="text"  name="loginacc"  placeholder="å¬ç§¯éå¸å·/èº«ä»½è¯å·" label="ç¨æ·å" valid="r">
+					<input id="loginacc"  type="text"  name="_username"  placeholder="公积金账号/身份证号" label="" valid="r">
 				</div>
 			</div>
 			<div class="mdui-input-row box box-align-c">
 				<div class=" fa fa-lock" style="color:#00A1EA;width:2em"></div>
 				<div class="box-f1">
-					<input id="loginpwd" value="" name="loginpwd"  placeholder="è¯·è¾å¥å¯ç "  class="weui_input " type="password" valid="r">
+					<input id="loginpwd" value="" name="_password"  placeholder="请输入密码"  class="weui_input " type="password" valid="r">
 				</div>
 			</div>
-		</div>
 		<div class="mar-all mar-row-top">
-			
-				
-					<a href="javascript:;" id="doLogin" class="fund_ui_btn fund_ui_btn_primary"> å¾®ä¿¡ç»å®</a>
-				
-				
-			
+    <button class="fund_ui_btn fund_ui_btn_primary" type="submit">微信绑定</button>
 		</div>
+		</form>
 		<div class="box mar-all mar-row-top login-nav-color">
-			<div id="goRegist" class="box-f1">ç«å³æ³¨å</div>
-			<div id="goRestPwd">å¿è®°å¯ç </div>
+			<div id="goRegist" class="box-f1">立即注册</div>
+			<div id="goRestPwd">忘记密码</div>
 		</div>
 		<div class="tx-c"  style="margin-top:10em;font-size:0.655em;color:#9B9B9B;width:95%;">
 			
-			<div > æ¬æå¡ç±åå °ä½æ¿å¬ç§¯éç®¡çä¸å¿ææ</div>
-			<div>  åå·ä¹è¿é¶æµ·è½¯ä»¶è¡ä»½æéå¬å¸æä¾ææ¯æ¯æ</div>
-			<div>  æå¡ççº¿ï¼12329</div>
+			<div >本服务由十堰住房公积金管理中心授权</div>
+			<div>四川久远银海软件股份有限公司提供技术支持</div>
+			<div>服务热线：12329</div>
 		</div>
 	</div>
-	<script type="text/javascript" >
-        $(document).ready(function(){
-            $("#goRegist").bind("click", function() {
-                $.openWin("register.jsp");
-            });
-            $("#goRestPwd").bind("click", function() {
-                $.openWin("pwdReset.jsp");
-            });
-            $("#doLogin").bind("click",doLogin);
-            reurl="null";
-            $.val("reurl",reurl);
-            autoFullUP();
-            
-        });
-        function doLogin(type){
-            var formName="loginForm";
-            var params = {"method": "user.login", "v": "1.4"};
-            if(type==1){
-                formName="";
-                params.bindcode="oR0-rwFTNBPw5kqD6Vew2jA42mcs";
-            }
-            $.doSubmit(formName,params, function(data){
-                $.val("percode",$("#loginacc").val());
-                $.val("_loginacc",$("#loginacc").val());
-                if(reurl=="null"){
-                    $.openWin("queryMain.jsp?r=124");
-                }else{
-                    $.openWin(reurl);
-                }
-            }, function(data){
-                $.toast(data.resmsg);
-            });
-        }
-	</script>
 {% endblock %}
