@@ -1,0 +1,122 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AccountController!{% endblock %}
+
+{% block body %}
+<div id="content">  
+	<div id="myAcct" style="display: none" class='mdui-input-group fundRow_tip_bg' >
+	    <div id="templ_row" onclick="openWin()" class='mdui-input-row right-arrow ' >
+	      <div class="box-f1 listCell">æçè´¦æ·</div>
+	      <div class='arrow' ></div>
+	   </div>
+	</div>    
+	<div id="selectBox" class="mdui-input-group mar-1-top" style="display:none">   
+	   <div class="mdui-input-row row-left-line select-arrow">
+	        <div class="box-f1">
+	            <select  id="corpName">
+	            </select>
+	        </div>
+	        <div class="arrow"></div>
+	   </div>    
+	</div>        
+	<div id="accountMny" class="grid-bg-color mar-1-top"></div>   
+	<div id="accountInfor" style="margin-top:1em"></div> 
+</div>
+<script  type="text/javascript">
+ $(document).ready(function(){
+    $.setLayOut();
+    fetchData(); 
+ });
+ function openWin(){
+     var perInfo=[{"name" : "å§å","value" : depData.pername},
+                {"name" : "æ§å«","value" : depData.sex}, 
+                {"name" : "èº«ä»½è¯å·","value" : depData.codeno},
+                {"name" : "åºçæ¥æ","value" : depData.birthday},
+                {"name" : "ææºå·ç ","value" : depData.phone}
+                 ];
+     $.val("_perInfo",perInfo);            
+     $.openWin("perAcctUserInfo.jsp");
+ }
+ function fetchData(){ 
+     $.doSubmit("",{"method": "user.perInfo", "v": "1.0"},function(data){
+                depData=data;
+                for(var i=0;i<depData.acct.length;i++){
+                    depData.acct[i].email=depData.email||"";
+                    depData.acct[i].bkcardname=depData.bkcardname||"";
+                    depData.acct[i].bkcard=depData.bkcard||"";
+                }
+                fillData(depData);
+           },function(data){
+               $.toast(data.resmsg);
+           },function(){
+               $.toast(data.resmsg);
+           }); 
+ } 
+
+ function fillData(depData){
+    $("#myAcct").show();
+   if(depData.acct.length==1){
+       showDetail(depData.acct[0]);
+   }else if(depData.acct.length>=2){
+      var acct = depData.acct;
+      var length = acct.length;
+      var option="";
+      
+      for(var i=0;i<length;i++){
+          option+="<option value='"+i+"'>"+acct[i].corpname+"</option>";
+      } 
+      $("#corpName").html(option);
+      $("#corpName").bind("change",function(){
+          showDetail(depData.acct[this.value]);
+      });
+      $("#corpName").change();
+      $("#selectBox").show();
+   }
+ }  
+ function showDetail(data){
+     var acctMny=[];
+     acctMny.push({"name":"ç¼´åä½é¢"   ,"class":"css/images/wallet.png","value":$.dataFormat(data.accbal)+"å"});
+     acctMny.push({"name":"ç¼´ååºæ°"   ,"class":"css/images/wallet.png","value":$.dataFormat(data.bmny)+"å"});
+     acctMny.push({"name":"ä¸ªäººç¼´åæ¯ä¾","class":"css/images/percent.png","value":$.dataFormat(data.perperscale)+"%"}); 
+     acctMny.push({"name":"åä½ç¼´åæ¯ä¾","class":"css/images/percent.png","value":$.dataFormat(data.percorpscale)+"%"}); 
+     acctMny.push({"name":"ä¸ªäººææ±ç¼´é¢","class":"css/images/wallet.png","value":$.dataFormat(data.perdepmny)+"å"}); 
+     acctMny.push({"name":"åä½ææ±ç¼´é¢","class":"css/images/wallet.png","value":$.dataFormat(data.corpdepmny)+"å"}); 
+     var length= acctMny.length;
+     var ui=[];
+     ui.push("<div class='fund_grids' >");
+     for(var i=0;i<length;i++){
+         var a= acctMny[i];
+         ui.push("<div class='fund_grid grid-2c'>"); 
+         ui.push("<div class='box box-align-c'>"); 
+         ui.push("<div class='box-f1'>"); 
+         ui.push("<img src='"+a.class+"'></div>"); 
+         ui.push("<div style='width:70%;line-height:2em'>"); 
+         ui.push("<div>"+a.name+"</div>");   
+         ui.push("<div class='grid-mny'>"+a.value+"</div>");                                        
+         ui.push("</div></div></div>"); 
+     }
+     ui.push("</div>");
+     $("#accountMny").html(ui.join(""));
+     var regtime =data.regtime;
+     if(regtime.length>=10){
+      regtime = regtime.substring(0,10).split("-");
+      regtime =regtime[0]+"å¹´"+regtime[1]+"æ"+regtime[2]+"æ¥"; 
+     } 
+     var accountInfo =[];
+     accountInfo.push({"name":"åä½åç§°","value":data.corpname});
+     accountInfo.push({"name":"åä½è´¦å·","value":data.corpcode});
+     accountInfo.push({"name":"ä¸ªäººè´¦å·","value":data.percode});
+     accountInfo.push({"name":"ç¼´åç®¡çé¨","value":data.depname});
+     accountInfo.push({"name":"ç¼´åé¶è¡","value":data.netname });
+     accountInfo.push({"name":"è´¦æ·ç¶æ","value":data.accstate});
+     accountInfo.push({"name":"å¼æ·æ¥æ","value":data.regtime});
+     accountInfo.push({"name":"ç¼´è³å¹´æ","value":((data.payendmnh!=null&&data.payendmnh.length==6)?(data.payendmnh.substring(0,4)+"å¹´"+data.payendmnh.substring(4,data.payendmnh.length)+"æ"):data.payendmnh)});
+     accountInfo.push({"name":"ç»å®é¶è¡","value":data.bkcardname});
+     accountInfo.push({"name":"ç»å®é¶è¡å¡å·","value":data.bkcard});
+     accountInfo.push({"name":"çµåé®ç®±","value":data.email});
+
+     $("#accountInfor").html($.list2Row(accountInfo));
+ }
+  
+</script>
+{% endblock %}
