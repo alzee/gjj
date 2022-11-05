@@ -20,6 +20,7 @@ security:
             form_login:
                 login_path: admin_login
                 check_path: admin_login
+                default_target_path: /admin
             logout:
                 path: admin_logout
                 target: admin_login
@@ -43,8 +44,10 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/login, roles: PUBLIC_ACCESS}
         - { path: ^/admin/login, roles: PUBLIC_ACCESS}
-        - { path: ^/admin, roles: ROLE_USER }
+        - { path: ^/, roles: ROLE_USER }
+          #- { path: ^/admin, roles: ROLE_USER }
         # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:
