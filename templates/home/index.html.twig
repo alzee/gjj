@@ -1,0 +1,195 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}公积金个人业务查询{% endblock %}
+
+{% block body %}
+<style>
+    .msgnumbox{position:relative;left:2.2em;top:-3.6em;display:none}
+    .msgnum{
+    max-width:2.5em;
+    max-height:2.1em;
+    font-size:0.625em;
+    border-radius:1.5em; 
+    background:red;
+    text-align:center;
+    color:#FFF;
+   }
+</style>
+
+  <div  id="fundbox" class="grid-bg-color"> 
+    <div  class="fund_grids" >
+       
+      <!-- <div  class="fund_grid  grid-3c shortcut" data-url="perOrder.jsp">
+            <div class="fund_grid_icon">
+                <i class="icon icon_order"></i>
+            </div>
+            <p class="grid_label">å¨çº¿é¢çº¦</p>
+        </div>
+        <div  class="fund_grid  grid-3c shortcut" data-url="perOrderList.jsp">
+            <div class="fund_grid_icon">
+                <i class="icon icon_search"></i>
+            </div>
+            <p class="grid_label">é¢çº¦æ¥è¯¢</p>
+        </div>-->
+
+         
+
+        <!-- 
+        <div  class="fund_grid  grid-3c" data-url="perjczm.jsp">
+            <div class="fund_grid_icon">
+                <i class="icon user-card"></i>
+            </div>
+            <p class="grid_label">ç¼´åè¯æ</p>
+        </div>
+          -->
+       
+
+      <!--   <div  class="fund_grid  grid-3c shortcut" data-url="perSubMsg.jsp">
+            <div class="fund_grid_icon">
+                <i class="icon icon_dy"></i>
+            </div>
+            <p class="grid_label">æ¶æ¯è®¢é</p>
+        </div>  --> 
+       
+           <div id="newsrecord" class="weui-panel__bd" style="width: 96%;margin-left: 3%;overflow-y:auto;height:auto">
+           </div>
+    </div>
+</div>
+
+<div class="tx-c"  style="font-size:0.655em;color:#9B9B9B;position:relative;width:95%;">
+    <div > æ¬æå¡ç±<script>document.write($.global.city)</script>ä½æ¿å¬ç§¯éç®¡çä¸å¿ææ</div>
+    <div>  åå·ä¹è¿é¶æµ·è½¯ä»¶è¡ä»½æéå¬å¸æä¾ææ¯æ¯æ</div>
+    <div>  æå¡ççº¿ï¼12329</div>
+</div>
+<script type="text/javascript">
+infoCount=0;
+$(document).ready(function(){
+    $.remove("year");
+    initServerMenus();
+    initnews();
+});
+function activUrl(){
+	$(".shortcut").bind("click",function(){
+		var url = $(this).attr("data-url");
+		if(url== "0"){
+           $.dialog({title:"",content:"ä¸å¿ææªå¼éæ¤åè½",mode:1});
+        }else if(url== "02"){
+           $.dialog({title:"",content:"ä½æ¿å¬ç§¯éå¼å°è½¬ç§»èç³»å½ãèå·¥ä½æ¿å¬ç§¯éç¼´åè¯ææå°åå¶ä»ä¸å¡åçåæ®æå°ï¼è¯·ä½¿ç¨PCç«¯æµè§å¨ç»å½ç½åè¿è¡æå°ã",mode:1});
+        }else if(/^[0-9]*$/.test(url)){
+        	window.location.href="tel:"+url;
+       		return; 
+        }else {
+			$.openWin(url+".jsp");
+        }
+	});
+}
+function initnews() {
+    var newslist = $.val("_newslist");
+    if (newslist) {
+        newslist = $.parseJSON(newslist);
+        fillNews(newslist);
+    }
+    var p = {"method": "user.getMenusList", "v": "1.0"};
+    $.doSubmit("", p, function (data) {
+        fillNews(data.list);
+        $.val("_newslist", data.list);
+        activUrl();
+    }, function (data) {
+        $.toast(data.resmsg);
+    });
+}
+
+function fillNews(list) {
+    var len = list.length;
+    var html = "";
+    for(var i=0;i<len;i++){
+        var item = list[i];
+        html+="<div  class='fund_grid  grid-3c shortcut' style='height: 7.2em;' data-url='"+item.funurl+"'>";
+        html+=" <div class='fund_grid_icon'>";
+        html+=" <i class='ic" +
+            "on "+item.iconskin+"'></i>";
+        html+=" </div>";
+        html+="   <center>  <p style='grid_label'>"+item.name+"</p></center>";
+        html+="</div>";
+    }
+    $("#newsrecord").html(html);
+}
+function initServerMenus(infoC){
+    if(infoC>=0){
+         infoCount = infoC;
+     } 
+    return;
+    $.doSubmit("",{ "method": "user.getMenusList", "v": "1.0"}, function(data){
+          $.val("authres",data.authres);
+         //textt.value=$.val("authres");
+         initPage(data.authres);
+    });
+}
+function setInfoAccount( count ){
+    if(count>0){
+      $(".msgnumbox").show();
+      $(".msgnum").html(count);
+    }
+}
+/////////////
+function initPage(list){
+    var pids=[];
+    var length = list.length;
+    for(var i=0;i<length;i++){
+        var pid=list[i].pid;
+        var c=0;
+        for(var j=0;j<length;j++){
+            if(pid==list[j].id){
+                c++;
+            }
+        }
+        if(c==0){
+            pids.push({name:list[i].name,pid:list[i].id});
+        }
+    }
+    var menus=[];//alert($.val("signflag")+":"+($.val("signflag")==null));
+   
+    for(var i=0;i<1;i++){
+        //menus.push("<div class='titleTip' >"+pids[i].name+"</div>");
+        menus.push("<div  class='fund_grids'>");
+        var _count=0;
+        
+        for(j=0;j<length;j++){
+          var menu=list[j]; 
+          if(pids[i].pid==menu.pid){
+               menus.push(getMenu(menu.name,menu.funurl,menu.iconskin,_count));   
+               _count++
+          }
+        }
+        menus.push("</div>");
+    }
+    
+    $("#funbox").html(menus.join(""));
+    activUrl();
+}
+function getMenu(name,url,icon,counts){
+    var menu="";
+    var grid_color="";
+    if(counts<4){ 
+        grid_color=" grid_color"
+    }
+    menu+="<div  class='fund_grid  grid-3c "+grid_color+" shortcut'  data-url='"+url+"'>"
+    menu+="    <div class='fund_grid_icon'>"
+    menu+="        <i class='icon "+icon+"'></i>" 
+    if(url.indexOf("perSubMsgList")!=-1){
+        var display="none";
+        if(infoCount>=1){
+            display="block";
+        }
+        menu+="<div class='msgnumbox' style='display:"+display+"'>";
+        menu+="   <div class='msgnum'>"+infoCount+"</div>";
+        menu+="</div>";  
+       
+    }
+    menu+="     </div>"
+    menu+="    <p class='grid_label' >"+name+"</p>"
+    menu+="</div>";
+    return menu;
+}
+</script>     
+{% endblock %}
