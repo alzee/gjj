@@ -105,7 +105,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $phone = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $plainPassword = null;
+    private ?string $plainPassword = '111';
 
     public function getId(): ?int
     {
