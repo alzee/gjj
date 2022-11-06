@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -18,6 +19,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 3, max: 30)]
     private ?string $username = null;
 
     #[ORM\Column]
@@ -29,22 +32,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ["unsigned" => true])]
+    #[Assert\Positive]
     private ?int $balance = 0;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ["unsigned" => true])]
+    #[Assert\Positive]
     private ?int $base = 150000;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ["unsigned" => true])]
+    #[Assert\Positive]
     private ?float $selfRatio = 0.08;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ["unsigned" => true])]
+    #[Assert\Positive]
     private ?float $compRatio = 0.08;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ["unsigned" => true])]
+    #[Assert\Positive]
     private ?int $selfMonth = 12000;
 
-    #[ORM\Column]
+    #[ORM\Column(options: ["unsigned" => true])]
+    #[Assert\Positive]
     private ?int $compMonth = 12000;
 
     #[ORM\Column(length: 255, nullable: true)]
