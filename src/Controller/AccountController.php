@@ -14,12 +14,12 @@ class AccountController extends AbstractController
     {
         $user = $this->getUser();
         $menus = [
-          ['label' => '缴存余额', 'unit' => '元', 'value' => $user->getBalance() / 100, 'img' => 'wallet'],
-          ['label' => '缴存基数', 'unit' => '元', 'value' => $user->getBase()/ 100, 'img' => 'wallet'],
-          ['label' => '个人缴存比例', 'unit' => '%', 'value' => $user->getSelfRatio() * 100, 'img' => 'percent'],
-          ['label' => '单位缴存比例', 'unit' => '%', 'value' => $user->getCompRatio() * 100, 'img' => 'percent'],
-          ['label' => '个人月汇缴额', 'unit' => '元', 'value' => $user->getSelfMonth() / 100, 'img' => 'wallet'],
-          ['label' => '单位月汇缴额', 'unit' => '元', 'value' => $user->getCompMonth() / 100, 'img' => 'wallet'],
+          ['label' => '缴存余额', 'unit' => '元', 'value' => number_format($user->getBalance() / 100, 2), 'img' => 'wallet'],
+          ['label' => '缴存基数', 'unit' => '元', 'value' => number_format($user->getBase()/ 100, 2), 'img' => 'wallet'],
+          ['label' => '个人缴存比例', 'unit' => '%', 'value' => number_format($user->getSelfRatio() * 100, 2), 'img' => 'percent'],
+          ['label' => '单位缴存比例', 'unit' => '%', 'value' => number_format($user->getCompRatio() * 100, 2), 'img' => 'percent'],
+          ['label' => '个人月汇缴额', 'unit' => '元', 'value' => number_format($user->getSelfMonth() / 100, 2), 'img' => 'wallet'],
+          ['label' => '单位月汇缴额', 'unit' => '元', 'value' => number_format($user->getCompMonth() / 100, 2), 'img' => 'wallet'],
         ];
         $list = [
           ['label' => '单位名称', 'value' => $user->getCompany()],
