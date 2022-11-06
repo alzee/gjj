@@ -11,6 +11,14 @@ class AccountController extends AbstractController
     #[Route('/account', name: 'app_account')]
     public function index(): Response
     {
+        $menus = [
+          ['label' => '缴存余额', 'unit' => '元', 'value' => '123', 'img' => 'wallet'],
+          ['label' => '缴存基数', 'unit' => '元', 'value' => '123', 'img' => 'wallet'],
+          ['label' => '个人缴存比例', 'unit' => '%', 'value' => '123', 'img' => 'percent'],
+          ['label' => '单位缴存比例', 'unit' => '%', 'value' => '123', 'img' => 'percent'],
+          ['label' => '个人月汇缴额', 'unit' => '元', 'value' => '123', 'img' => 'wallet'],
+          ['label' => '单位月汇缴额', 'unit' => '元', 'value' => '123', 'img' => 'wallet'],
+        ];
         $list = [
           ['label' => '单位名称', 'value' => 'test'],
           ['label' => '单位账号', 'value' => 'test'],
@@ -25,6 +33,7 @@ class AccountController extends AbstractController
           ['label' => '电子邮箱', 'value' => 'test'],
         ];
         return $this->render('account/index.html.twig', [
+          'menus' => $menus,
           'list' => $list
         ]);
     }

@@ -23,72 +23,19 @@
   #}
 	<div id="accountMny" class="grid-bg-color mar-1-top">
      <div class='fund_grids' >
+     {% for i in menus %}
      <div class='fund_grid grid-2c'>
        <div class='box box-align-c'>
          <div class='box-f1'>
-           <img src="https://www.sygjj.gov.cn/netface/weixin/css/images/wallet.png">
+           <img src="https://www.sygjj.gov.cn/netface/weixin/css/images/{{i.img}}.png">
          </div>
          <div style='width:70%;line-height:2em'>
-           <div>缴存余额</div>
-           <div class='grid-mny'>元</div>
+           <div>{{i.label}}</div>
+           <div class='grid-mny'>{{i.value}}{{i.unit}}</div>
          </div>
        </div>
      </div> 
-     <div class='fund_grid grid-2c'>
-       <div class='box box-align-c'>
-         <div class='box-f1'>
-           <img src="https://www.sygjj.gov.cn/netface/weixin/css/images/wallet.png">
-         </div>
-         <div style='width:70%;line-height:2em'>
-           <div>缴存基数</div>
-           <div class='grid-mny'>元</div>
-         </div>
-       </div>
-     </div> 
-     <div class='fund_grid grid-2c'>
-       <div class='box box-align-c'>
-         <div class='box-f1'>
-           <img src="https://www.sygjj.gov.cn/netface/weixin/css/images/percent.png">
-         </div>
-         <div style='width:70%;line-height:2em'>
-           <div>个人缴存比例</div>
-           <div class='grid-mny'>元</div>
-         </div>
-       </div>
-     </div> 
-     <div class='fund_grid grid-2c'>
-       <div class='box box-align-c'>
-         <div class='box-f1'>
-           <img src="https://www.sygjj.gov.cn/netface/weixin/css/images/percent.png">
-         </div>
-         <div style='width:70%;line-height:2em'>
-           <div>单位缴存比例</div>
-           <div class='grid-mny'>元</div>
-         </div>
-       </div>
-     </div> 
-     <div class='fund_grid grid-2c'>
-       <div class='box box-align-c'>
-         <div class='box-f1'>
-           <img src="https://www.sygjj.gov.cn/netface/weixin/css/images/wallet.png">
-         </div>
-         <div style='width:70%;line-height:2em'>
-           <div>个人月汇缴额</div>
-           <div class='grid-mny'>元</div>
-         </div>
-       </div>
-     </div> 
-     <div class='fund_grid grid-2c'>
-       <div class='box box-align-c'>
-         <div class='box-f1'>
-           <img src="https://www.sygjj.gov.cn/netface/weixin/css/images/wallet.png">
-         </div>
-         <div style='width:70%;line-height:2em'>
-           <div>单位月汇缴额</div>
-           <div class='grid-mny'>元</div>
-         </div>
-       </div>
-     </div> 
+     {% endfor %}
     </div>   
   </div>   
 
