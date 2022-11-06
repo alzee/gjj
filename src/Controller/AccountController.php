@@ -38,7 +38,22 @@ class AccountController extends AbstractController
         ]);
     }
 
-    #[Route('/transactions', name: 'app_transactions')]
+    #[Route('/account/info', name: 'app_account_info')]
+    public function getAccountInfo(): Response
+    {
+        $list = [
+            ['label' => '姓名', 'value' => ''],
+            ['label' => '性别', 'value' => ''],
+            ['label' => '身份证号', 'value' => ''],
+            ['label' => '出生日期', 'value' => ''],
+            ['label' => '手机号码', 'value' => ''],
+        ];
+        return $this->render('account/info.html.twig', [
+            'list' => $list
+        ]);
+    }
+
+    #[Route('/account/transactions', name: 'app_transactions')]
     public function getTransactions(): Response
     {
         return $this->render('account/transactions.html.twig', [
