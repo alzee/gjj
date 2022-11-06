@@ -115,6 +115,7 @@ class UserCrudController extends AbstractCrudController
         yield TextField::new('plainPassword')
             ->hideOnIndex()
         ;
+        yield BooleanField::new('isAdmin');
     }
 
     public function configureCrud(Crud $crud): Crud
