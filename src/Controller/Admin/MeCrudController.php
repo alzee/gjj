@@ -126,10 +126,12 @@ class MeCrudController extends AbstractCrudController
     public function configureActions(Actions $actions): Actions
     {
         if ($this->isGranted('ROLE_ADMIN')) {
-            return $actions;
+            return $actions
+                ->disable(Action::SAVE_AND_RETURN)
+                ;
         } else {
             return $actions
-                ->disable(Action::DELETE, Action::NEW, Action::INDEX)
+                ->disable(Action::DELETE, Action::NEW, Action::INDEX, Action::SAVE_AND_RETURN)
             ;
         }
     }

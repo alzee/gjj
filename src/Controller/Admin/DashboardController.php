@@ -19,11 +19,17 @@ class DashboardController extends AbstractDashboardController
         
         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
         if ($this->isGranted('ROLE_ADMIN')) {
-            $crud = UserCrudController::class;
+            $gn = $adminUrlGenerator
+                ->setController(UserCrudController::class)
+            ;
         } else {
-            $crud = MeCrudController::class;
+            $gn = $adminUrlGenerator
+                ->setController(MeCrudController::class)
+                ->setAction('edit')
+                ->setEntityId($this->getUser()->getId())
+            ;
         }
-        return $this->redirect($adminUrlGenerator->setController($crud)->generateUrl());
+        return $this->redirect($gn->generateUrl());
 
         // Option 1. You can make your dashboard redirect to some common page of your backend
         //
