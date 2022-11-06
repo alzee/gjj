@@ -1,1 +1,2 @@
 toggle admin
+setAction('edit') change `entityId` change edit other user's info?
