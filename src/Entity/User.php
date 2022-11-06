@@ -111,6 +111,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $plainPassword = '111';
 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createAt = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -453,6 +456,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPlainPassword(string $plainPassword): self
     {
         $this->plainPassword = $plainPassword;
+
+        return $this;
+    }
+
+    public function getCreateAt(): ?\DateTimeImmutable
+    {
+        return $this->createAt;
+    }
+
+    public function setCreateAt(\DateTimeImmutable $createAt): self
+    {
+        $this->createAt = $createAt;
 
         return $this;
     }
