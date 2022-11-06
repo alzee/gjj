@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Taxon;
 
 class AccountController extends AbstractController
 {
@@ -26,9 +27,9 @@ class AccountController extends AbstractController
           ['label' => '个人账号', 'value' => $user->getAccount()],
           ['label' => '缴存管理部', 'value' => $user->getDistrict()],
           ['label' => '缴存银行', 'value' => $user->getBank()],
-          ['label' => '账户状态', 'value' => $user->getStatus()],
-          ['label' => '开户日期', 'value' => $user->getStartAt()->format('Y-m-d')],
-          ['label' => '缴至年月', 'value' => $user->getEndAt()->format('Y年m月')],
+          ['label' => '账户状态', 'value' => array_flip(Taxon::STATUS)[$user->getStatus()]],
+          ['label' => '开户日期', 'value' => $user->getStartAt() ? $user->getStartAt()->format('Y-m-d') : ''],
+          ['label' => '缴至年月', 'value' => $user->getEndAt() ? $user->getEndAt()->format('Y年m月') : ''],
           ['label' => '绑定银行', 'value' => $user->getBindBank()],
           ['label' => '绑定银行卡号', 'value' => $user->getBankAccount()],
           ['label' => '电子邮箱', 'value' => $user->getEmail()],
@@ -45,9 +46,9 @@ class AccountController extends AbstractController
         $user = $this->getUser();
         $list = [
             ['label' => '姓名', 'value' => $user->getName()],
-            ['label' => '性别', 'value' => $user->isSex()],
+            ['label' => '性别', 'value' => array_flip(Taxon::SEX)[$user->isSex()]],
             ['label' => '身份证号', 'value' => $user->getIdNo()],
-            ['label' => '出生日期', 'value' => $user->getBirthAt()->format('Y-m-d')],
+            ['label' => '出生日期', 'value' => $user->getBirthAt() ? $user->getBirthAt()->format('Y-m-d') : ''],
             ['label' => '手机号码', 'value' => $user->getPhone()],
         ];
         return $this->render('account/info.html.twig', [
