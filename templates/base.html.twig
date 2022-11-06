@@ -38,5 +38,16 @@
             <div>服务热线：12329</div>
           </div>
         {% endblock %}
+    <div class="circle box box-c tx-c" id="float-btn">
+      <div class="fa  fa-angle-left fa-2x" style="color:#00A1EA;display:relative;">
+      </div>
+    </div>
+    <script>
+    let btn = document.querySelector('#float-btn');
+    btn.addEventListener('click', closeCurrWin);
+    function closeCurrWin() {
+      window.history.go(-1);
+    } 
+    </script>
     </body>
 </html>
