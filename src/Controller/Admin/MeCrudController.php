@@ -122,4 +122,15 @@ class MeCrudController extends AbstractCrudController
             ->setPageTitle('edit', 'Edit My Info')
         ;
     }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return $actions;
+        } else {
+            return $actions
+                ->disable(Action::DELETE, Action::NEW, Action::INDEX)
+            ;
+        }
+    }
 }

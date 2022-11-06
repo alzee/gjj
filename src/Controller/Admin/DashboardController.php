@@ -18,7 +18,12 @@ class DashboardController extends AbstractDashboardController
         // return parent::index();
         
         $adminUrlGenerator = $this->container->get(AdminUrlGenerator::class);
-        return $this->redirect($adminUrlGenerator->setController(UserCrudController::class)->generateUrl());
+        if ($this->isGranted('ROLE_ADMIN')) {
+            $crud = UserCrudController::class;
+        } else {
+            $crud = MeCrudController::class;
+        }
+        return $this->redirect($adminUrlGenerator->setController($crud)->generateUrl());
 
         // Option 1. You can make your dashboard redirect to some common page of your backend
         //
@@ -45,8 +50,10 @@ class DashboardController extends AbstractDashboardController
 
     public function configureMenuItems(): iterable
     {
-        yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('UserManage', 'fa fa-user', User::class);
+        if ($this->isGranted('ROLE_ADMIN')) {
+            yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
+            yield MenuItem::linkToCrud('UserManage', 'fa fa-user', User::class);
+        }
         yield MenuItem::linkToCrud('Me', 'fas fa-cog', User::class)
             ->setController(MeCrudController::class)
             ->setAction('edit')

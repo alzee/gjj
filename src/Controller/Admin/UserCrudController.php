@@ -135,7 +135,7 @@ class UserCrudController extends AbstractCrudController
             return $actions;
         } else {
             return $actions
-                // ->disable(Action::DELETE, Action::NEW, Action::INDEX)
+                ->disable(Action::DELETE, Action::NEW, Action::INDEX)
             ;
         }
     }
