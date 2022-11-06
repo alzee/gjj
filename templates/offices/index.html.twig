@@ -1,0 +1,97 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello OfficesController!{% endblock %}
+
+{% block body %}
+    <div id="content" >
+        <div id="listView" ></div>
+    </div>
+    <script type="text/javascript" >
+       $(document).ready(function(){
+          $.setLayOut();
+          initServiceNet();
+        })
+            function initServiceNet(){
+                 /*$.doSubmit("",{"method":"user.serverSite", "v": "1.0"}, function(data){
+                     dataList = data.list;
+                     var html="";
+                     for(var i=0;i<dataList.length;i++){
+                       var d = dataList[i];
+                       d.loc = d.deplocation.split(",");
+                       d.title= d.depname;
+                       html+='<div style="margin:1.2em 0em;background:#FFF;padding:.4em" onclick="openDetail('+i+')" class="box box-c right-arrow" >';
+                       html+='    <div class="box-f1">';
+                       html+='        <div >';
+                       html+='           <span>'+d.depname+'</span>';                                                                       
+                       html+='           <div  style="margin-top:0.6em;color:#8B8B8E;font-size:0.875em;display:block;font-weight:blod;" >地址：'+d.depaddr+'</div>'; 
+                       html+='        </div>'; 
+                       html+='    </div>';
+                       html+='    <div class="arrow "></div>';                 
+                       html+='</div>';
+                     }
+                      $("#listView").html(html);
+                 });*/
+               
+                dataList= [{
+                    title : "市直管理部", 
+                    note:"<span>北京中路82号京东路交通银行对面（市民服务中心）<div style='padding-top:0.5em'>电话：0719-8603816（缴存、提取）（贷款）</div></span>",
+                    loc:[110.803784,32.634993]
+                }, {
+                    title : "张湾管理部",
+                    note:"<span >张湾区凯旋大道7号张湾市民之家<div style='padding-top:0.5em'>电话：0719-8669852</div></span>",
+                    loc:[110.776385,32.657916]
+                },{
+                    title : "茅箭管理部",
+                    note:"<span >茅箭区重庆路99号汉成天地内街一楼政务服务大厅 <div style='padding-top:0.5em'>电话：0719-8783242</div></span>",
+                    loc:[110.815876,32.596751]
+                },{
+                    title : "武当山管理部",
+                    note:"<span >太极湖东路99号特区政务服务中心一楼西大厅<div style='padding-top:0.5em'>电话：0719-5662820</div></span>",
+                    loc:[111.092591,32.516419]
+                },{
+                    title : "丹江口市管理部",
+                    note:"<span>丹江口市丹江大道26-4号政务服务大厅<div style='padding-top:0.5em'>电话：0719-5226218</div></span>",
+                    loc:[111.519192,32.534347]
+                },{
+                    title : "郧阳管理部",
+                    note:"<span >郧阳区江汉大道辛福溪里小区市民服务中心1号二楼<div style='padding-top:0.5em'>电话：0719-7234599</div></span>",
+                    loc:[110.814298,32.841555]
+                },{
+                    title : "郧西管理部",
+                    note:"<span >郧西县城关镇人民路3号政务服务中心<div style='padding-top:0.5em'>电话：0719-6222919</div></span>",
+                    loc:[110.440424,32.997232]
+                },{
+                    title : "竹山县管理部",
+                    note:"<span >竹山县城关镇纵横大道8号政务服务大厅<div style='padding-top:0.5em'>电话：0719-4228787</div></span>",
+                    loc:[110.23632,32.229071]
+                },{
+                    title : "房县管理部",
+                    note:"<span >房县城关镇诗经大道1号诗经文化广场“市民之家”A栋(政务服务大厅)<div style='padding-top:0.5em'>电话：0719-3245066</div></span>",
+                    loc:[110.751284,32.058276]
+                },{
+                    title : "竹溪管理部",
+                    note:"<span >竹溪县鄂陕大道420号政务服务大厅<div style='padding-top:0.5em'>电话：0719-2730201</div></span>",
+                    loc:[109.722357,32.317908]
+                }];
+                var html="";
+                $.each(dataList, function(i, d){
+                               html+='<div style="margin:1.2em 0em;background:#FFF;padding:.4em" onclick="openDetail('+i+')" class="box box-c right-arrow" >';
+                               html+='    <div class="box-f1">';
+                               html+='        <div >';
+                               html+='           <span>'+d.title+'</span>';                                                                       
+                               html+='           <div  style="margin-top:0.6em;color:#8B8B8E;font-size:0.875em;display:block;font-weight:blod;" >地址：'+d.note+'</div>'; 
+                               html+='        </div>'; 
+                               html+='    </div>';
+                               html+='    <div class="arrow "></div>';                 
+                               html+='</div>';
+                });
+                
+                $("#listView").html(html);
+               
+            }
+            function openDetail(index){
+               $.val("__serloc", dataList[index]);
+               $.openWin("serviceSiteMap.jsp");
+            }
+     </script>
+{% endblock %}
