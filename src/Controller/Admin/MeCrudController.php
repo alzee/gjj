@@ -103,7 +103,7 @@ class MeCrudController extends AbstractCrudController
             ->hideOnIndex()
         ;
         yield TextField::new('name');
-        yield ChoiceField::new('sex')
+        yield ChoiceField::new('isMale')
             ->setChoices(Taxon::SEX)
         ;
         yield TextField::new('idNo');

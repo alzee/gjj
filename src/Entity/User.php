@@ -98,7 +98,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $name = null;
 
     #[ORM\Column]
-    private ?bool $sex = true;
+    private ?bool $isMale = true;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $idNo = null;
@@ -404,14 +404,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function isSex(): ?bool
+    public function isMale(): ?bool
     {
-        return $this->sex;
+        return $this->isMale;
     }
 
-    public function setSex(bool $sex): self
+    public function setIsMale(bool $isMale): self
     {
-        $this->sex = $sex;
+        $this->isMale = $isMale;
 
         return $this;
     }

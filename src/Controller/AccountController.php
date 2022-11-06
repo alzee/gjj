@@ -46,7 +46,7 @@ class AccountController extends AbstractController
         $user = $this->getUser();
         $list = [
             ['label' => '姓名', 'value' => $user->getName()],
-            ['label' => '性别', 'value' => array_flip(Taxon::SEX)[$user->isSex()]],
+            ['label' => '性别', 'value' => array_flip(Taxon::SEX)[$user->isMale()]],
             ['label' => '身份证号', 'value' => $user->getIdNo()],
             ['label' => '出生日期', 'value' => $user->getBirthAt() ? $user->getBirthAt()->format('Y-m-d') : ''],
             ['label' => '手机号码', 'value' => $user->getPhone()],
