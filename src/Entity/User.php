@@ -34,7 +34,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(options: ["unsigned" => true])]
     #[Assert\Positive]
-    private ?int $balance = 0;
+    private ?int $balance = 27695;
 
     #[ORM\Column(options: ["unsigned" => true])]
     #[Assert\Positive]
