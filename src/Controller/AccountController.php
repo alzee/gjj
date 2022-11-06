@@ -63,7 +63,7 @@ class AccountController extends AbstractController
     #[Route('/account/loan/info', name: 'app_loan_info')]
     public function getLoanInfo(): Response
     {
-        return $this->render('account/no_info.html.twig', [
+        return $this->render('account/loan_info.html.twig', [
         ]);
     }
 

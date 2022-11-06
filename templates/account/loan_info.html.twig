@@ -1,0 +1,175 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}贷款信息{% endblock %}
+
+{% block body %}
+<style>
+#accountInfor .mdui-input-group:after, #accountInfor .mdui-input-group:before {
+  background-color: unset;
+}
+</style>
+<div id="content"> 
+   <div class="mdui-input-group" id="addressList" style="display: none">
+       <div  class="mdui-input-row row-left-line select-arrow">
+           <div class="box-f1 select">
+                <select class="select" onchange="showLoanInfo(this.value)" id="address"  name="address"></select> 
+            </div>
+            <div class="arrow"></div>
+       </div>    
+   </div>
+   
+   <div class="box box-c mar-all" >
+       <div id="canvasBox" >
+           <canvas id="canvas" > </canvas>
+       </div>
+   </div>
+   <div class="grid-bg-color">
+      <div class='fund_grids' id="gridMny" > 
+      </div>     
+   </div>
+   <div id="loanInfo"></div>
+   <div id="msgtip" class="box box-c" style="display: none;margin-top:10em">
+       <div class="box box-c">æ¨å½åæ²¡æè´·æ¬¾ä¿¡æ¯</div>
+   </div>  
+</div>
+<div style="display: none">
+   <div id="mnyCell" class='fund_grid grid-2c'>
+     <div class='box box-align-c'>
+      <div class='box-f1'><img src='css/images/wallet.png'></div>
+         <div style='width:70%;line-height:2em'>
+            <div id="name"></div>
+            <div class="grid-mny" id="value"></div>                                       
+         </div>
+     </div>
+   </div> 
+   <div id="repayRecord" class='mdui-input-group fundRow_tip_bg mar-1-top'>
+      <div class='mdui-input-row right-arrow '>
+         <div class='box-f1 listCell'>è¿æ¬¾è®°å½</div>
+         <div class='arrow'></div>
+     </div>
+   </div>
+    <div id="repayPlan" class='mdui-input-group fundRow_tip_bg mar-1-top'>
+        <div class='mdui-input-row right-arrow '>
+            <div class='box-f1 listCell'>è¿æ¬¾è®¡å</div>
+            <div class='arrow'></div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" > 
+   $(document).ready(function(){
+       initSize();
+       $.setLayOut(); 
+       fetchData();
+   });
+   var dataList = [];// {result=1, txchannel=1, resfilemny=0, rescode=1, pertype=21, list=[{curdepname=ç®¡çé¨5, loancontractno=10220110112004, busstate=è´·æ¬¾å·²å¼æ·, remark=, fundloanmny=80000, loanedate=2016-04-26, state=åç», busrate=3.75, ver=1, repayway=çé¢æ¬é, loanmnhs=60, pername=æ¹ç, yrate=3.75, overday=0, curdepcode=01050000, overdrate=0.015625, rate=3.75, bkcodeno=102, bktypecode=102, punishdriftscale=50, busno=10220110112004, percode=210384248, paytype=çé¢æ¬é, housenature=, houseamount=851999, orderpayday=20, isdrift=, prerate=0, loanmny=80000, curpername=é±è³, bkcode=010510201, mnhpaymny=1333.33, paynature=å®æ¥è¿æ¬¾, ordenddate=2016-04-26, relationship=01, curpercode=789, bkname=é¶è¡010510201, dotime=1900-01-01, driftscale=0, payacccode=9558801901105500522, address=é¨è±åºé¦æ¨è·¯469å·XH2åº§(æ )2101å·, busiloanmny=0, fpaymny=771999, punishrate=0.015625, ordloandate=2011-04-26, fmnhpaymny=1333.33, loansdate=2011-04-26, grbh=210384248}, {curdepname=åä¸å¿, loancontractno=60120111031002, busstate=è´·æ¬¾å·²å¼æ·, remark=, fundloanmny=410000, loanedate=2020-01-09, state=åç», busrate=4.675, ver=1, repayway=çé¢æ¬æ¯, loanmnhs=96, pername=æ¹ç, yrate=4.25, overday=0, curdepcode=02010000, overdrate=0.01770833, rate=4.675, bkcodeno=105, bktypecode=105, punishdriftscale=50, busno=60120111031002, percode=210384248, paytype=çé¢æ¬æ¯, housenature=, houseamount=823452, orderpayday=20, isdrift=, prerate=0, loanmny=410000, curpername=ç³»ç»æ , bkcode=020110501, mnhpaymny=5267.04, paynature=å®æ¥è¿æ¬¾, ordenddate=2020-01-09, relationship=01, curpercode=2481, bkname=é¶è¡020110501, dotime=1900-01-01, driftscale=10, payacccode=6227002920762222529, address=å¤©å¿åºèµ¤å²è·¯215å·å·3åº§(æ )804å·, busiloanmny=0, fpaymny=413452, punishrate=0.01947917, ordloandate=2012-01-09, fmnhpaymny=5155.37, loansdate=2012-01-09, grbh=210384248}], txcode=PLB002, clientinfo=localhost:5080trader-bank2-TEST1-6, reqident=nt_ident9915, resident=bank11098755, txtime=145033, prepicnt1=1, forgcode=e33ff3416588cc973d83, resmsg=è°ç¨æå, ipaddr=192.168.253.1, source=03, enccode=, percode=210384248, loginchl=03, reqfilemny=0, txdate=20160810, torgcode=5510gjj}
+   function initSize(){
+       var width =$(window).width();
+       var w=parseInt(width/2.1);
+       if(width<=414){ w=205;} 
+       $("#canvasBox").width(w);  
+       $("#canvasBox").height(w);      
+       $("#canvas").attr("width",w);
+       $("#canvas").attr("height",w);
+   }
+   function fetchData(){
+       $.doSubmit("",{"method": "user.queryPerLoanAccount", "v": "1.0"},function(data){
+                dataList=data.list;
+                if(dataList.length<=0){
+                	$("#canvasBox").remove();
+                    $("#msgtip").show();
+                    return;
+                }
+                $("#msgtip").hide();
+                if(dataList&&dataList.length>=1){
+                	for(var i=0;i<dataList.length;i++){
+                		dataList[i].loanmnhs=dataList[i].loanmnhs/12; 
+                    } 
+                }
+                fillData(dataList);
+           },function(data){
+               $.toast(data.resmsg);
+           },function(){
+               $.toast(data.resmsg);
+           });    
+   }    
+   function fillData(list){
+        var length = list.length;
+        var options="";
+        for(i=0;i<length;i++){
+           options+="<option value='"+i+"'>"+list[i].address+"</option>";
+        } 
+        $("#address").html(options);
+        if(length==0){
+            $.toast("æ¨æ²¡æè´·æ¬¾ä¿¡æ¯");
+            $.closeWin();
+            return;
+        }else if(length>=2){
+            $("#addressList").show();
+           
+        }
+        showLoanInfo(0);
+   } 
+   function showLoanInfo(index){
+        var data = dataList[index];
+        Pie.drawPie("canvas",data.loanmny,data.recovmny);
+        var loanMny=[];
+        loanMny.push({name:"å©ä½æ¬é",value:$.dataFormat(data.loanbal)+"å"});
+        loanMny.push({name:"å·²è¿å©æ¯",value:$.dataFormat(data.recovratemny)+"å"});
+        loanMny.push({name:"é¾ææ¬é",value:$.dataFormat(data.owemny)+"å"});
+        loanMny.push({name:"é¾æå©æ¯",value:$.dataFormat((parseFloat(data.oweratemny)+parseFloat(data.owepunishmny)))+"å"});
+        var length= loanMny.length;
+        var gridMny = $("#gridMny");
+        gridMny.html("");
+        for(var i=0;i<length;i++){
+            var mnyCell = $("#mnyCell").clone();
+            var d = loanMny[i];
+            mnyCell.find("#name,#value").each(function(index){
+                $(this).text(d[this.id]);
+            })
+            gridMny.append(mnyCell); 
+        }
+        var loanCon=[];
+        loanCon.push({name:"è´·æ¬¾ååå·",value:data.loancontractno});
+        loanCon.push({name:"æ¿å±å°å",value:data.address});
+         //list.push({name:"è´·æ¬¾éé¢",value:data.loanmny+"å"});
+        loanCon.push({name:"è´·æ¬¾å¹´é",value:data.loanmnhs+"å¹´"});
+        if(data.yrate){data.yrate=data.yrate+"%"}
+        loanCon.push({name:"å½åå©ç",value:data.yrate});
+        loanCon.push({name:"è¿æ¬¾æ¹å¼",value:data.repayway});
+        if(data.orderpayday){
+          loanCon.push({name:"çº¦å®è¿æ¬¾æ¥",value:"æ¯æ"+data.orderpayday+"æ¥"});
+        }
+        loanCon.push({name:"æå±ç®¡çé¨",value:data.curdepname});
+        loanCon.push({name:"è¿æ¬¾é¶è¡",value:data.bkname});
+        loanCon.push({name:"è¿æ¬¾è´¦å·",value:data.payacccode});
+         //list.push({name:"è´·æ¬¾ä½é¢",value:data.loanbal+"å"});
+         //list.push({name:"é¾ææ¬é",value:data.owemny+"å"});
+         //list.push({name:"é¾æå©æ¯",value:data.oweratemny+"å"});
+        loanCon.push({name:"ä¸æ¬¡è¿æ¬¾æ¶é´",value:(data.nextpaytime!=null&&data.nextpaytime.length<11?data.nextpaytime:data.nextpaytime.substr(0,10))});
+        loanCon.push({name:"é¦æ¬¡è¿æ¬¾æ¥æ",value:data.schksj});
+        var loanInfo =$("#loanInfo");
+        var repayRecord = $("#repayRecord").clone();
+        repayRecord.bind("click",function(){
+            var index = parseInt($("select").val());
+            $.val("address",dataList[index].address);
+            $.val("loanConNo",dataList[index].loancontractno);
+            $.openWin("perLoanRepayRd.jsp");
+        });
+       var repayPlan = $("#repayPlan").clone();
+       repayPlan.bind("click",function(){
+           var index = parseInt($("select").val());
+           $.val("address",dataList[index].address);
+           $.val("loanConNo",dataList[index].loancontractno);
+           $.openWin("perLoanRepayPlan.jsp");
+       });
+        loanInfo.html(repayRecord);
+        loanInfo.append(repayPlan);
+        loanInfo.append("<div class='titleTip'>è´·æ¬¾ååä¿¡æ¯</div>");
+        loanInfo.append($.list2Row(loanCon));
+        
+   }
+</script>  
+
+<script src="{{ asset('js/z.js') }}"></script>
+{% endblock %}
