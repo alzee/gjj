@@ -41,11 +41,17 @@ class UserCrudController extends AbstractCrudController
     {
         yield IdField::new('id')->onlyOnIndex();
         yield TextField::new('username');
+        yield TextField::new('username')
+            ->onlyWhenUpdating()
+            ->setDisabled()
+            // ->setPermission('ROLE_ADMIN')
+        ;
         yield MoneyField::new('balance')
             ->setCurrency('CNY')
         ;
         yield MoneyField::new('base')
             ->setCurrency('CNY')
+            ->hideOnIndex()
         ;
         yield PercentField::new('selfRatio')
             ->hideOnIndex()
@@ -78,7 +84,6 @@ class UserCrudController extends AbstractCrudController
         ;
         yield ChoiceField::new('status')
             ->setChoices(['封存' => 0, '正常' => 1])
-            ->hideOnIndex()
         ;
         yield DateField::new('startAt')
             ->hideOnIndex()
@@ -135,6 +140,7 @@ class UserCrudController extends AbstractCrudController
     {
         return $filters
             ->add('sex')
+            ->add('status')
         ;
     }
 
