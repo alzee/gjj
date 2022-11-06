@@ -44,12 +44,17 @@ class AccountController extends AbstractController
     public function getAccountInfo(): Response
     {
         $user = $this->getUser();
+        if (mb_strlen($user->getName()) > 2) {
+            $asteroids = '**';
+        } else {
+            $asteroids = '*';
+        }
         $list = [
-            ['label' => '姓名', 'value' => $user->getName()],
+            ['label' => '姓名', 'value' => $asteroids . mb_substr($user->getName(), -1)],
             ['label' => '性别', 'value' => array_flip(Taxon::SEX)[$user->isMale()]],
-            ['label' => '身份证号', 'value' => $user->getIdNo()],
+            ['label' => '身份证号', 'value' => substr_replace($user->getIdNo(), '********', 6, 8)],
             ['label' => '出生日期', 'value' => $user->getBirthAt() ? $user->getBirthAt()->format('Y-m-d') : ''],
-            ['label' => '手机号码', 'value' => $user->getPhone()],
+            ['label' => '手机号码', 'value' => substr_replace($user->getPhone(), '****', 3, 4)],
         ];
         return $this->render('account/info.html.twig', [
             'list' => $list
