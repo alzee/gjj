@@ -4,9 +4,17 @@
 
 {% block body %}
 <style>
-#accountInfor .mdui-input-group:after, #accountInfor .mdui-input-group:before {
+.mdui-input-group:after, .mdui-input-group:before {
   background-color: unset;
 }
 </style>
+{% for i in list %}
+  <div class='mdui-input-group fundRow_tip_bg' style='margin-top:0px' >
+    <div class='mdui-input-row' style='font-size:0.9375em'>
+      <div style='txt'>{{i.label}}</div>
+      <div style='color:#8B8B8E' class='box-f1 tx-r'>{{i.value}}</div>
+    </div>
+  </div> 
+{% endfor %}
 <script src="{{ asset('js/z.js') }}"></script>
 {% endblock %}
