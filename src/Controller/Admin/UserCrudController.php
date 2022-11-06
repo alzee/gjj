@@ -4,6 +4,28 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TelephoneField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -12,14 +34,53 @@ class UserCrudController extends AbstractCrudController
         return User::class;
     }
 
-    /*
     public function configureFields(string $pageName): iterable
     {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
+        yield IdField::new('id')->onlyOnIndex();
+        yield TextareaField::new('note');
+        yield ChoiceField::new('sex')
+            ->setChoices(['女' => 0, '男' => 1])
+        ;
+        yield MoneyField::new('amount')
+            ->setCurrency('CNY')
+        ;
     }
-    */
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setDefaultSort(['id' => 'DESC'])
+            // ->setPageTitle('index', 'Sale')
+            // ->setSearchFields(['buyer.name', 'orderItems.product.name'])
+            // ->setHelp('index', $helpIndex)
+            // ->setHelp('new', $helpNew)
+        ;
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        if ($this->isGranted('ROLE_ADMIN')) {
+            return $actions;
+        } else {
+            return $actions
+                // ->disable(Action::DELETE, Action::NEW, Action::INDEX)
+            ;
+        }
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return $filters
+            ->add('sex')
+        ;
+    }
+
+    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
+    {
+        $uid = $this->getUser()->getId();
+        $response = $this->container->get(EntityRepository::class)->createQueryBuilder($searchDto, $entityDto, $fields, $filters);
+        $response
+            ->andWhere("entity.id != $uid");
+        return $response;
+    }
 }
