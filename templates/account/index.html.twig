@@ -1,15 +1,16 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AccountController!{% endblock %}
+{% block title %}个人账户信息{% endblock %}
 
 {% block body %}
 <div id="content">  
-	<div id="myAcct" style="display: none" class='mdui-input-group fundRow_tip_bg' >
-	    <div id="templ_row" onclick="openWin()" class='mdui-input-row right-arrow ' >
-	      <div class="box-f1 listCell">æçè´¦æ·</div>
-	      <div class='arrow' ></div>
+	<div id="myAcct" class='mdui-input-group fundRow_tip_bg' >
+	    <div id="templ_row" class='mdui-input-row right-arrow ' >
+	      <div class="box-f1 listCell">我的账户</div>
+	      <div class='arrow'></div>
 	   </div>
 	</div>    
+  {#
 	<div id="selectBox" class="mdui-input-group mar-1-top" style="display:none">   
 	   <div class="mdui-input-row row-left-line select-arrow">
 	        <div class="box-f1">
@@ -19,8 +20,78 @@
 	        <div class="arrow"></div>
 	   </div>    
 	</div>        
-	<div id="accountMny" class="grid-bg-color mar-1-top"></div>   
-	<div id="accountInfor" style="margin-top:1em"></div> 
+  #}
+	<div id="accountMny" class="grid-bg-color mar-1-top">
+     <div class='fund_grid grid-2c'>
+       <div class='box box-align-c'>
+         <div class='box-f1'>
+           <img src="https://www.sygjj.gov.cn/netface/weixin/css/images/wallet.png">
+         </div>
+         <div style='width:70%;line-height:2em'>
+           <div>缴存余额</div>
+           <div class='grid-mny'>元</div>
+         </div>
+       </div>
+     </div> 
+     <div class='fund_grid grid-2c'>
+       <div class='box box-align-c'>
+         <div class='box-f1'>
+           <img src="https://www.sygjj.gov.cn/netface/weixin/css/images/wallet.png">
+         </div>
+         <div style='width:70%;line-height:2em'>
+           <div>缴存基数</div>
+           <div class='grid-mny'>元</div>
+         </div>
+       </div>
+     </div> 
+     <div class='fund_grid grid-2c'>
+       <div class='box box-align-c'>
+         <div class='box-f1'>
+           <img src="https://www.sygjj.gov.cn/netface/weixin/css/images/percent.png">
+         </div>
+         <div style='width:70%;line-height:2em'>
+           <div>个人缴存比例</div>
+           <div class='grid-mny'>元</div>
+         </div>
+       </div>
+     </div> 
+     <div class='fund_grid grid-2c'>
+       <div class='box box-align-c'>
+         <div class='box-f1'>
+           <img src="https://www.sygjj.gov.cn/netface/weixin/css/images/percent.png">
+         </div>
+         <div style='width:70%;line-height:2em'>
+           <div>单位缴存比例</div>
+           <div class='grid-mny'>元</div>
+         </div>
+       </div>
+     </div> 
+     <div class='fund_grid grid-2c'>
+       <div class='box box-align-c'>
+         <div class='box-f1'>
+           <img src="https://www.sygjj.gov.cn/netface/weixin/css/images/wallet.png">
+         </div>
+         <div style='width:70%;line-height:2em'>
+           <div>个人月汇缴额</div>
+           <div class='grid-mny'>元</div>
+         </div>
+       </div>
+     </div> 
+     <div class='fund_grid grid-2c'>
+       <div class='box box-align-c'>
+         <div class='box-f1'>
+           <img src="https://www.sygjj.gov.cn/netface/weixin/css/images/wallet.png">
+         </div>
+         <div style='width:70%;line-height:2em'>
+           <div>单位月汇缴额</div>
+           <div class='grid-mny'>元</div>
+         </div>
+       </div>
+     </div> 
+  </div>   
+
+	<div id="accountInfor" style="margin-top:1em">
+  </div> 
 </div>
 <script  type="text/javascript">
  $(document).ready(function(){
