@@ -42,12 +42,13 @@ class AccountController extends AbstractController
     #[Route('/account/info', name: 'app_account_info')]
     public function getAccountInfo(): Response
     {
+        $user = $this->getUser();
         $list = [
-            ['label' => '姓名', 'value' => ''],
-            ['label' => '性别', 'value' => ''],
-            ['label' => '身份证号', 'value' => ''],
-            ['label' => '出生日期', 'value' => ''],
-            ['label' => '手机号码', 'value' => ''],
+            ['label' => '姓名', 'value' => $user->getName()],
+            ['label' => '性别', 'value' => $user->isSex()],
+            ['label' => '身份证号', 'value' => $user->getIdNo()],
+            ['label' => '出生日期', 'value' => $user->getBirthAt()->format('Y-m-d')],
+            ['label' => '手机号码', 'value' => $user->getPhone()],
         ];
         return $this->render('account/info.html.twig', [
             'list' => $list
