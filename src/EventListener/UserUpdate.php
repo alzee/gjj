@@ -28,5 +28,13 @@ class UserUpdate
             $user->setPassword($this->hasher->hashPassword($user, $user->getPlainPassword()));
             $user->eraseCredentials();
         }
+
+        if ($event->hasChangedField('isAdmin')) {
+            if ($user->isAdmin()) {
+                $user->setRoles(['ROLE_ADMIN']);
+            } else {
+                $user->setRoles([]);
+            }
+        }
     }
 }

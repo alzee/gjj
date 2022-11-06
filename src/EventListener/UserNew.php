@@ -25,5 +25,9 @@ class UserNew extends AbstractController
     {
         $user->setPassword($this->hasher->hashPassword($user, $user->getPlainPassword()));
         $user->eraseCredentials();
+
+        if ($user->isAdmin()) {
+            $user->setRoles(['ROLE_ADMIN']);
+        }
     }
 }

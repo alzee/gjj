@@ -482,7 +482,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->createdAt = new \DateTimeImmutable();
     }
 
-    public function isIsAdmin(): ?bool
+    public function isAdmin(): ?bool
     {
         return $this->isAdmin;
     }
