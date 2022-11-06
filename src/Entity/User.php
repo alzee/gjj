@@ -29,22 +29,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column]
-    private ?int $balance = null;
+    private ?int $balance = 0;
 
     #[ORM\Column]
-    private ?int $base = null;
+    private ?int $base = 150000;
 
     #[ORM\Column]
-    private ?float $selfRatio = null;
+    private ?float $selfRatio = 0.08;
 
     #[ORM\Column]
-    private ?float $compRatio = null;
+    private ?float $compRatio = 0.08;
 
     #[ORM\Column]
-    private ?int $selfMonth = null;
+    private ?int $selfMonth = 12000;
 
     #[ORM\Column]
-    private ?int $compMonth = null;
+    private ?int $compMonth = 12000;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $company = null;
