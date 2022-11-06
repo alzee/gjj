@@ -16,6 +16,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\PercentField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -37,13 +40,40 @@ class UserCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         yield IdField::new('id')->onlyOnIndex();
-        yield TextareaField::new('note');
+        yield TextField::new('username');
+        yield MoneyField::new('balance')
+            ->setCurrency('CNY')
+        ;
+        yield MoneyField::new('base')
+            ->setCurrency('CNY')
+        ;
+        yield PercentField::new('selfRatio');
+        yield PercentField::new('compRatio');
+        yield MoneyField::new('selfMonth')
+            ->setCurrency('CNY')
+        ;
+        yield MoneyField::new('compMonth')
+            ->setCurrency('CNY')
+        ;
+        yield TextField::new('company');
+        yield TextField::new('companyAccount');
+        yield TextField::new('account');
+        yield TextField::new('district');
+        yield TextField::new('bank');
+        yield TextField::new('status');
+        yield DateField::new('startAt');
+        yield DateField::new('endAt');
+        yield TextField::new('bindBank');
+        yield TextField::new('bankAccount');
+        yield EmailField::new('email');
+        yield TextField::new('name');
         yield ChoiceField::new('sex')
             ->setChoices(['女' => 0, '男' => 1])
         ;
-        yield MoneyField::new('amount')
-            ->setCurrency('CNY')
-        ;
+        yield TextField::new('idNo');
+        yield DateField::new('birthAt');
+        yield TelephoneField::new('phone');
+        yield TextField::new('plainPassword');
     }
 
     public function configureCrud(Crud $crud): Crud
