@@ -40,14 +40,14 @@ class DashboardController extends AbstractDashboardController
     public function configureDashboard(): Dashboard
     {
         return Dashboard::new()
-            ->setTitle('Gjj');
+            ->setTitle('公积金个人业务查询');
     }
 
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
-        yield MenuItem::linkToCrud('user', 'fa fa-user', User::class);
-        yield MenuItem::linkToCrud('me', 'fas fa-cog', User::class)
+        yield MenuItem::linkToCrud('UserManage', 'fa fa-user', User::class);
+        yield MenuItem::linkToCrud('Me', 'fas fa-cog', User::class)
             // ->setController(PasswordCrudController::class)
             ->setAction('edit')
             ->setEntityId($this->getUser()->getId())

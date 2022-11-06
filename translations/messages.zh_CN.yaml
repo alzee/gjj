@@ -1,0 +1,40 @@
+ID: 序号
+Dashboard: 数据统计
+User: 用户
+UserManage: 用户管理
+Date: 日期
+Address: 地址
+Username: 用户名
+Password: 密码
+Roles: 角色
+Success: 已完成
+Orders: 订单
+Type: 类型
+Note: 备注
+Title: 标题
+Body: 正文
+Bank Addr: 开户行地址
+Me: 我的信息
+Balance: 缴存余额
+Base: 缴存基数
+Self Ratio: 个人缴存比例
+Comp Ratio: 单位缴存比例
+Self Month: 个人月汇缴额
+Comp Month: 个人月汇缴额
+Company: 单位名称
+Company Account: 单位账号
+Account: 个人账号
+District: 缴存管理部
+Bank: 缴存银行
+Status: 账户状态
+Start At: 开户日期
+End At: 缴至年月
+Bind Bank: 绑定银行
+Bank Account: 绑定银行卡号
+Email: 电子邮箱
+Name: 姓名
+Sex: 性别
+Id No: 身份证号
+Birth At: 出生日期
+Phone: 手机号码
+Plain Password: 密码
