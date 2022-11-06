@@ -5,78 +5,14 @@
 {% block body %}
   <div id="fundbox" class="grid-bg-color"> 
     <div class="fund_grids" >
-      <div class="fund_grid  grid-3c grid-black shortcut" data-url="/account">
+    {% for i in menus %}
+      <div class="fund_grid  grid-3c grid-black shortcut" data-url="{{i.url}}">
         <div class="fund_grid_icon">
-          <i class="icon icon_account"></i>
+          <i class="icon {{i.icon}}"></i>
         </div>
-        <p class="grid_label">账户信息</p>
+        <p class="grid_label">{{i.label}}</p>
       </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="/transactions">
-        <div class="fund_grid_icon">
-          <i class="icon icon_banlace"></i>
-        </div>
-        <p class="grid_label">明细账</p>
-      </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="/account/loan/info">
-        <div class="fund_grid_icon">
-          <i class="icon icon_loanInfo"></i>
-        </div>
-        <p class="grid_label">贷款信息</p>
-      </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="/account/loan/progress">
-        <div class="fund_grid_icon">
-          <i class="icon icon_loanProcess"></i>
-        </div>
-        <p class="grid_label">贷款进度</p>
-      </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="/account/loan/direct_repay">
-        <div class="fund_grid_icon">
-          <i class="icon icon_ts"></i>
-        </div>
-        <p class="grid_label">冲还贷签约</p>
-      </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="/account/loan/repay">
-        <div class="fund_grid_icon">
-          <i class="icon icon_loanProcess"></i>
-        </div>
-        <p class="grid_label">提前还款</p>
-      </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="/account/retire">
-        <div class="fund_grid_icon">
-          <i class="icon icon_retire"></i>
-        </div>
-        <p class="grid_label">退休提取</p>
-      </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="/account/phone/change">
-        <div class="fund_grid_icon">
-          <i class="icon icon-phone_cg"></i>
-        </div>
-        <p class="grid_label">手机变更</p>
-      </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="/account/password/reset">
-        <div class="fund_grid_icon">
-          <i class="icon icon_pwdrest"></i>
-        </div>
-        <p class="grid_label">密码重置</p>
-      </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="/account/card/bind">
-        <div class="fund_grid_icon">
-          <i class="icon icon_hzlp"></i>
-        </div>
-        <p class="grid_label">银行卡绑定</p>
-      </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="/account/msg">
-        <div class="fund_grid_icon">
-          <i class="icon icon_msg2"></i>
-        </div>
-        <p class="grid_label">我的消息</p>
-      </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="/logout">
-        <div class="fund_grid_icon">
-          <i class="icon icon_wsearch"></i>
-        </div>
-        <p class="grid_label">退出登录</p>
-      </div>
+    {% endfor %}
     </div>
 </div>
 <script src="{{ asset('js/z.js') }}"></script>
