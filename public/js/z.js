@@ -1,4 +1,4 @@
-let menus = document.querySelectorAll('.fund_grid');
+let menus = document.querySelectorAll('#fundbox .fund_grid');
 
 let myAcct = document.querySelector('#myAcct');
 if (myAcct) {
