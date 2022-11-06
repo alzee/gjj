@@ -1,0 +1,381 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}明细账查询{% endblock %}
+
+{% block body %}
+<style>
+#accountInfor .mdui-input-group:after, #accountInfor .mdui-input-group:before {
+  background-color: unset;
+}
+</style>
+<style>
+ .cells_tip_bg .box_cell:not(.no_access):active {
+     background-color: #D9D9D9;
+ }
+ .cells_tip_bg .radius:not(.no_access):active {
+     background-color: #fbf9fe;
+ }
+.listbox0:before{
+ content: '';
+  position: absolute;
+  width: .2em;
+  height: 100%;
+  background:#00a1ea;
+  left:0px; 
+  top: 0;
+  border-radius: .0em .0em .0em .0em ;
+ } 
+.listbox1:before{
+ content: '';
+  position: absolute;
+  width: .2em;
+  height: 100%;
+  background:#f5c74b;
+  left:0px; 
+  top: 0;
+  border-radius: .0em .0em .0em .0em ;
+ }  
+.box .cell{display: block;width: 33.3333%;font-size:0.85em;} 
+.color0{color:#00a1ea}
+.color1{color:#eebe3b}
+
+.radius{background:#FFF;border-radius: .5em;padding:.5em;border-top:1px solid #c5e5f4}
+  </style> 
+   	</head>
+<body>
+
+  	 	 
+<header id="header" >
+  <div   class="header">
+    <div class="header-nav"  id="nav-left">
+         
+    </div>
+    <div id="title" class="header-title ut-s tx-c">
+       <div class="box box-f1" style="color:#333;background: #FFF;border-radius: .4em;padding:.3em" >
+           <div class="fa fa-search" style="color:#00A1EA" ></div> 
+           <div onclick="queryBalance()" class="box-f1">
+               <input  disabled="" id="searchInput" class="fund_input" placeholder="输入查询年份" />
+           </div>
+        </div>
+    </div>
+    <div class="header-nav"  id="nav-right">
+          <!-- >div class="header-nav"  onclick="queryBalance()" id="nav-right">
+	         <div class="fa fa-search  fa-1x mar-0-right" ></div>
+	    </div -->
+    </div>
+</div>
+</header>
+<div id="content"> 
+    <div style="padding: 10px 10px;">
+     <div id="tabbar" class="mdui-segmented-control">
+        <a id="tabindex0" onclick="tabOnchange(0,this)" class="mdui-control-item  mdui-active" href="#item1">余额明细总账</a>
+        <a onclick="tabOnchange(1,this)" class="mdui-control-item" href="#item2">汇补缴明细</a>
+        <a onclick="tabOnchange(2,this)" class="mdui-control-item" href="#item3">提取明细</a>
+    </div>
+     <div id="errortip" style="margin-top:4em;display:none">
+        <div class="box box-c">
+           <div>没有查询到相关信息</div>
+         </div>
+     </div>
+</div>      
+   <div id="balanceList0" class='mdui-input-group fundRow_tip_bg'  style="display: none"></div>
+   <div id="balanceList1" class='mdui-input-group fundRow_tip_bg'  style="display: none"></div>
+   <div id="balanceList2" class='mdui-input-group fundRow_tip_bg'  style="display: none"></div>
+  
+</div>
+<span class="downNav">
+ <button id="btndown" onclick="downloadData()">账户明细下载</button>
+</span>
+<div  style="display: none" >
+   <div  id="list"  style="height:3.5em;" class='mdui-input-row right-arrow shortcut box-align-c' data-url="perAcctUserInfo.html">
+      <div class="box-f1">
+          <div id="remark" style="font-size: .9em"></div>
+          <div  style="color:#666;font-size: .8em">äº¤ææ¶é´ï¼<span id="acctime"></span></div>
+      </div>
+      <div id="fse" style="color:#666;"></div>
+      <div class='arrow'></div>
+   </div>  
+   <div  id="jclist"  style="height:3.5em;" class='mdui-input-row right-arrow shortcut box-align-c' data-url="perAcctUserInfo.html">
+      <div class="box-f1" style="font-size: .9em">
+          <div id="bustype"></div>
+          <div id="acctime" style="color:#666;font-size: .8em"></div>
+      </div>
+      <div id="depmny" style="color:#666;"></div>
+      <div class='arrow'></div>
+   </div> 
+   <div  id="drowlist"  style="height:3.5em;" class='mdui-input-row right-arrow shortcut box-align-c' data-url="perAcctUserInfo.html">
+      <div class="box-f1" style="font-size: .9em">
+          <div id="reason"></div>
+          <div id="fetchdate" style="color:#666;font-size: .8em"></div>
+      </div>
+      <div id="factfetchmny" style="color:#666;"></div>
+      <div class='arrow'></div>
+   </div> 
+   
+</div>
+<script  type="text/javascript">
+var downtype=1;//ä¸è½½ç±»å
+ $(document).ready(function(){
+    $.setLayOut();
+    var date = new Date();
+    year = date.getFullYear();
+    $("#searchInput").val(year+"å¹´");
+    fetchBalanceData();
+ });
+ year = "";
+ qLimit=3;
+ function fetchBalanceData(){
+     var params = {"method": "user.getPerBalChgDetails", "v": "1.0"};
+     params.year = year;
+     $.doSubmit("",params,function(data){ 
+                balanceList=data.list;
+                if(balanceList.length<=0){
+                     $.toast("æ¨å½åæ²¡æä½é¢åå¨ä¿¡æ¯");
+                     return;
+                }
+                qLimit=data.qLimit||qLimit;
+                balanList(balanceList);
+                $("#balanceList0").show();
+           },function(data){
+               //$.toast(data.resmsg);
+        	   $("#errortip").show();
+               $("#balanceList0").hide();
+           },function(){
+               $.toast(data.resmsg);
+           }); 
+ }
+ 
+  function depositData(){  
+     var params = {"method": "user.getPerDepRecord", "v": "1.0"};
+     params.year = year;
+     $.doSubmit("",params,function(data){
+                qLimit=data.qLimit||qLimit;
+                depList=data.list;
+                if(depList.length<=0){
+                     $.toast("æ¨å½åæ²¡ææ±ç¼´ä¿¡æ¯");
+                     return;
+                }
+                depositList(depList);
+                $("#balanceList1").show();
+           },function(data){
+               $("#errortip").show();
+               $("#balanceList1").hide();
+        	   //$.toast(data.resmsg);
+           },function(){
+               $.toast(data.resmsg);
+           }); 
+ }  
+  function drawData(){   
+	     var params = {"method": "user.getPerFetchRecord", "v": "1.0"};
+	     if(year){
+	         params.year = year;
+	     } 
+	     $.doSubmit("",params,function(data){
+	        qLimit=data.qLimit||qLimit;
+	        drawRecord=data.list;
+	        if(drawRecord.length<=0){ 
+	             $.toast("æ¨æ²¡æä»å¬ç§¯éä¸å¿æåè¿éé¢");
+	             return;
+	        }
+	        $("#balanceList2").show();
+	        drawList(drawRecord);
+	   },function(data){
+	       //$.toast(data.resmsg);
+		   $("#errortip").show();
+           $("#balanceList2").hide();
+	   },function(){
+	       $.toast(data.resmsg);
+	   }); 
+	 }  
+ function balanList(list){
+     var length = list.length;
+     $("#balanceList0").show();
+     $("#balanceList0").html("");
+     for(var i=0;i<length;i++){ 
+         var data =list[i];
+         var c = $("#list").clone();
+         var ids="#acctime,#remark";
+         c.find(ids).each(function(index){
+             var id= this.id; 
+              $(this).text($.dataFormat(data[id]));
+         });
+         var outcome = parseFloat(data.outcome);
+         
+         if(outcome<=0){
+             c.find("#fse").text($.dataFormat(data.income));
+         }else{
+             c.find("#fse").text("-"+$.dataFormat(data.outcome));
+         }
+         c.attr("index",i);
+         c.bind("click",function (){
+             var list =[];
+            
+             var index = $(this).attr("index");
+             var data = balanceList[index]; 
+             var accmnh="";
+             try{
+                accmnh = data.acctime.substring(0,7);
+             }catch(e){}
+             list.push({id:"corpname",name:"åä½åç§°",value:data.corpname});
+             var outmny = parseFloat(data.outcome);
+             if(outmny<=0){
+                 list.push({id:"fsdesc",name:"æ¶å¥",value:"æ¶å¥"});
+                 list.push({id:"fsmny",name:"æ¶å¥",value:$.dataFormat(data.income)});
+             }else{
+               list.push({id:"fsdesc",name:"æ¯åº",value:"æ¯åº"})
+               list.push({id:"fsmny",name:"æ¯åº",value:$.dataFormat(data.outcome)});
+             }
+             list.push({id:"depname",name:"äº¤ææºæ",value:data.depname});
+             list.push({id:"inmny",name:"æ¶å¥",value:data.income});
+             list.push({id:"outmny",name:"æ¯åº",value:data.outcome});
+             list.push({id:"accmny",name:"ç¼´åä½é¢",value:$.dataFormat(data.accbal)+"å"});
+             list.push({id:"accmnh",name:"å¯¹åºå¹´æ",value:accmnh});  
+             list.push({id:"acctime",name:"å¥è´¦æ¶é´",value:data.acctime});
+             list.push({id:"remark",name:"ä¸å¡ç±»å",value:data.remark});
+             
+             $.val("balanceList",list);
+             $.openWin("perBalanceDetail.jsp","ä½é¢åå¨è¯¦æ");
+         } );
+         $("#balanceList0").append(c);
+     }
+ } 
+
+function queryBalance(){
+    var html="<div >" 
+    html+="<div  class='tx-c mar-all' >";
+    var y =(new Date()).getFullYear();
+    for(var i=0;i<qLimit;i++){ 
+       html+="<div onclick='search("+y+")' class='seach-Box'>";
+       html+="  <div class='box' >&nbsp;&nbsp;"+y+"å¹´</div>";              
+       html+="</div>";
+       y--;
+    }  
+    html+="</div></div>";
+    $.dialog({content:html,mode:-1}); 
+    $(".dialogMask").bind("click",function(){
+        $(".fund_dialog_confirm").remove();
+    });
+}  
+function search(y){
+	year=y; 
+	$("#errortip").hide();
+	$("#balanceList0,#balanceList1,#balanceList2").empty();
+	$("#searchInput").val(year+"å¹´");
+    if(indexItem==0){
+          fetchBalanceData();
+      }else if(indexItem==1){
+    	  depositData();
+      }else if(indexItem==2){
+    	  drawData();    
+      }
+    $(".fund_dialog_confirm").remove();
+}
+indexItem = 0;
+function tabOnchange(index,that){
+	downtype=index+1;
+	if(downtype==1){
+		$("#btndown").html("è´¦æ·ä½é¢æç»ä¸è½½");
+	}else if(downtype==2){
+		$("#btndown").html("ä¸ªäººæç»ä¸è½½");
+	}else if(downtype==3){
+		$("#btndown").html("æåæç»ä¸è½½");
+	}
+   $("#errortip").hide();
+   $(".mdui-control-item").removeClass("mdui-active");
+   $(that).addClass("mdui-active");
+   var text = $("#balanceList"+index).html();
+   $(".fundRow_tip_bg").hide();
+   $("#balanceList"+index).show();
+   indexItem=index;
+   if(!text){
+      if(index==0){
+          fetchBalanceData();
+      }else if(index==1){
+          depositData();
+      }else if(index==2){
+    	  drawData()       
+      }
+   }
+}
+function depositList(list){
+    var length = list.length;
+     $("#balanceList1").show();
+     $("#balanceList1").html("");
+     for(var i=0;i<length;i++){ 
+         var data =list[i]; 
+         var c = $("#jclist").clone();
+         var ids="#bustype,#depmny,#acctime";
+         c.find(ids).each(function(index){
+             var id= this.id; 
+              $(this).text($.dataFormat(data[id]));
+         });
+         c.attr("index",i);
+         c.bind("click",function(){
+             var list =[];
+               var index = $(this).attr("index");
+               var data = depList[index];
+              
+               list.push({id:"corpname",name:"åä½åç§°",value:data.corpname});
+               list.push({id:"corpdepmny",name:"åä½ç¼´åé¢",value:$.dataFormat(data.corpdepmny)+"å"});
+               list.push({id:"perdepmny",name:"ä¸ªäººç¼´åé¢",value:$.dataFormat(data.perdepmny)+"å"});
+               list.push({id:"depmny",name:"åè®¡",value:$.dataFormat(data.depmny)});
+               list.push({id:"bustype",name:"ä¸å¡ç±»å",value:data.bustype});
+               list.push({id:"acctime",name:"ç¼´æ¬¾æ¶é´",value:data.acctime});
+               $.val("deplist",JSON.stringify(list));
+               $.openWin("perDepositDetail.jsp","ç¼´åæåµè¯¦æ");
+           });
+
+         $("#balanceList1").append(c);
+     }
+}
+function drawList(list){
+   
+    var length = list.length;
+     $("#balanceList2").show();
+     $("#balanceList2").html("");
+     for(var i=0;i<length;i++){ 
+         var data =list[i];
+         var c = $("#drowlist").clone();
+         var ids="#reason,#fetchdate,#factfetchmny";
+         c.find(ids).each(function(index){
+             var id= this.id; 
+              $(this).text($.dataFormat(data[id]));
+         });
+         c.attr("index",i);
+         c.bind("click",function(){
+        	 var list =[];
+        	 var index = $(this).attr("index");
+             var data = drawRecord[index];
+             list.push({id:"corpname", name:"å·¥ä½åä½",value:data.corpname});
+             list.push({id:"pername",name:"ç³è¯·äºº",value:data.curname});
+             //list.push({name:"æ¿å±å°å",value:data.houseaddr});
+             list.push({id:"reason",name:"æååå ",value:data.reason});
+             list.push({id:"fetchdate",name:"æåæ¥æ",value:data.fetchdate});
+             list.push({id:"fetchmny",name:"æåéé¢",value:$.dataFormat(data.factfetchmny)});
+             if(data.paytype){
+               //list.push({name:"æåæ¹å¼",value:data.paytype});
+             }
+             list.push({id:"payaccname",name:"æ¶æ¬¾æ·å",value:data.payaccname});
+             list.push({id:"paybkname",name:"æ¶æ¬¾é¶è¡",value:data.paybkname});
+             list.push({id:"paybkcard",name:"æ¶æ¬¾è´¦å·",value:data.paybkcard});
+             list.push({id:"remark",name:"å¤æ³¨ä¿¡æ¯",value:data.remark});
+             list.push({id:"depname",name:"äº¤ææºæ",value:data.depname});
+             if(data.busstate){
+               list.push({id:"busstate",name:"ä¸å¡ç¶æ",value:(data.busstate.indexOf("å¤çä¸")!=-1?"<span style='color:red'>"+data.busstate+"</span>":data.busstate)});
+             }
+             $.val("list",JSON.stringify(list));
+             $.openWin("perDrawDetail.jsp");
+         });
+         $("#balanceList2").append(c);
+     }
+}
+function downloadData(){
+	$.val("downtype",downtype);
+	$.val("year",year);
+	$.openWin("downnav.jsp?type="+downtype+"&year="+year+"&a="+$.val("encrypt"));
+}
+</script>
+
+
+<script src="{{ asset('js/z.js') }}"></script>
+{% endblock %}
