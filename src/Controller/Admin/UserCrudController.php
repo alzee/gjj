@@ -23,12 +23,15 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\BooleanFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
 use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Orm\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use App\Entity\Taxon;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -83,7 +86,7 @@ class UserCrudController extends AbstractCrudController
             ->hideOnIndex()
         ;
         yield ChoiceField::new('status')
-            ->setChoices(['封存' => 0, '正常' => 1])
+            ->setChoices(Taxon::STATUS)
         ;
         yield DateField::new('startAt')
             ->hideOnIndex()
@@ -102,7 +105,7 @@ class UserCrudController extends AbstractCrudController
         ;
         yield TextField::new('name');
         yield ChoiceField::new('sex')
-            ->setChoices(['女' => 0, '男' => 1])
+            ->setChoices(Taxon::SEX)
         ;
         yield TextField::new('idNo');
         yield DateField::new('birthAt')
@@ -139,8 +142,8 @@ class UserCrudController extends AbstractCrudController
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
-            ->add('sex')
-            ->add('status')
+            ->add(ChoiceFilter::new('sex')->setChoices(Taxon::SEX))
+            ->add(ChoiceFilter::new('status')->setChoices(Taxon::STATUS))
         ;
     }
 
