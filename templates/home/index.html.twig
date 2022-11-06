@@ -3,88 +3,75 @@
 {% block title %}公积金个人业务查询{% endblock %}
 
 {% block body %}
-<style>
-    .msgnumbox{position:relative;left:2.2em;top:-3.6em;display:none}
-    .msgnum{
-    max-width:2.5em;
-    max-height:2.1em;
-    font-size:0.625em;
-    border-radius:1.5em; 
-    background:red;
-    text-align:center;
-    color:#FFF;
-   }
-</style>
-
   <div id="fundbox" class="grid-bg-color"> 
     <div class="fund_grids" >
-      <div class="fund_grid  grid-3c grid-black shortcut" data-url="perOrder.jsp">
+      <div class="fund_grid  grid-3c grid-black shortcut" data-url="/account_info">
         <div class="fund_grid_icon">
           <i class="icon icon_account"></i>
         </div>
         <p class="grid_label">账户信息</p>
       </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="perOrder.jsp">
+      <div class="fund_grid  grid-3c shortcut" data-url="/trans">
         <div class="fund_grid_icon">
           <i class="icon icon_banlace"></i>
         </div>
         <p class="grid_label">明细账</p>
       </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="perOrder.jsp">
+      <div class="fund_grid  grid-3c shortcut" data-url="/loan_info">
         <div class="fund_grid_icon">
           <i class="icon icon_loanInfo"></i>
         </div>
         <p class="grid_label">贷款信息</p>
       </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="perOrder.jsp">
+      <div class="fund_grid  grid-3c shortcut" data-url="/loan_progress">
         <div class="fund_grid_icon">
           <i class="icon icon_loanProcess"></i>
         </div>
         <p class="grid_label">贷款进度</p>
       </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="perOrder.jsp">
+      <div class="fund_grid  grid-3c shortcut" data-url="/">
         <div class="fund_grid_icon">
           <i class="icon icon_ts"></i>
         </div>
         <p class="grid_label">冲还贷签约</p>
       </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="perOrder.jsp">
+      <div class="fund_grid  grid-3c shortcut" data-url="/repay">
         <div class="fund_grid_icon">
           <i class="icon icon_loanProcess"></i>
         </div>
         <p class="grid_label">提前还款</p>
       </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="perOrder.jsp">
+      <div class="fund_grid  grid-3c shortcut" data-url="/retire">
         <div class="fund_grid_icon">
           <i class="icon icon_retire"></i>
         </div>
         <p class="grid_label">退休提取</p>
       </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="perOrder.jsp">
+      <div class="fund_grid  grid-3c shortcut" data-url="/chphone">
         <div class="fund_grid_icon">
           <i class="icon icon-phone_cg"></i>
         </div>
         <p class="grid_label">手机变更</p>
       </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="perOrder.jsp">
+      <div class="fund_grid  grid-3c shortcut" data-url="/reset_pw">
         <div class="fund_grid_icon">
           <i class="icon icon_pwdrest"></i>
         </div>
         <p class="grid_label">密码重置</p>
       </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="perOrder.jsp">
+      <div class="fund_grid  grid-3c shortcut" data-url="/bind_card">
         <div class="fund_grid_icon">
           <i class="icon icon_hzlp"></i>
         </div>
         <p class="grid_label">银行卡绑定</p>
       </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="perOrder.jsp">
+      <div class="fund_grid  grid-3c shortcut" data-url="/msg">
         <div class="fund_grid_icon">
           <i class="icon icon_msg2"></i>
         </div>
         <p class="grid_label">我的消息</p>
       </div>
-      <div class="fund_grid  grid-3c shortcut" data-url="perOrder.jsp">
+      <div class="fund_grid  grid-3c shortcut" data-url="/logout">
         <div class="fund_grid_icon">
           <i class="icon icon_wsearch"></i>
         </div>
