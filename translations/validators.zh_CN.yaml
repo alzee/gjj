@@ -1,2 +1,4 @@
 Username cannot start with number: 用户名不能以数字开头
 This username is already in use: 该用户名已被使用
+Phone number should have {{ limit }} characters: 电话号码应为{{ limit }}位。
+ID should have {{ limit }} numbers: 身份证号应为{{ limit }}位。

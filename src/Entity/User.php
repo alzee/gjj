@@ -101,12 +101,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?bool $isMale = true;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(
+        min: 18,
+        max: 18,
+        exactMessage: 'ID should have {{ limit }} numbers'
+    )]
     private ?string $idNo = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $birthAt = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(
+        min: 11,
+        max: 11,
+        exactMessage: 'Phone number should have {{ limit }} characters'
+    )]
     private ?string $phone = null;
 
     #[ORM\Column(length: 255, nullable: true)]
