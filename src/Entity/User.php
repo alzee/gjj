@@ -6,6 +6,7 @@ use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -61,8 +62,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $bank = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $status = null;
+    #[ORM\Column(type: Types::SMALLINT)]
+    private ?int $status = 0;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $startAt = null;
@@ -83,7 +84,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $name = null;
 
     #[ORM\Column]
-    private ?bool $sex = null;
+    private ?bool $sex = true;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $idNo = null;
@@ -299,12 +300,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?int
     {
         return $this->status;
     }
 
-    public function setStatus(?string $status): self
+    public function setStatus(int $status): self
     {
         $this->status = $status;
 
