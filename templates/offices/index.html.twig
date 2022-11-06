@@ -1,10 +1,30 @@
 {% extends 'base.html.twig' %}
 
+{% block headjs %}
+<script type="text/javascript">
+	var basePath = "/netface/";
+</script>
+<script src="https://www.sygjj.gov.cn/netface/weixin/js/jquery-1.11.1.min.js?r=dsfsdf"></script>
+<script src="https://www.sygjj.gov.cn/netface/weixin/js/layer/layer.js?r=dsfsdf"></script>
+<script src="https://www.sygjj.gov.cn/netface/weixin/js/yinhai.js?rd=43"></script>
+<script src="https://www.sygjj.gov.cn/netface/weixin/js/netutil.js?r=65"></script>
+{% endblock %}
+
 {% block title %}Hello OfficesController!{% endblock %}
 
 {% block body %}
     <div id="content" >
-        <div id="listView" ></div>
+        <div id="listView" >
+          <div style="margin:1.2em 0em;background:#FFF;padding:.4em" onclick="openDetail('+i+')" class="box box-c right-arrow" >
+            <div class="box-f1">
+              <div>
+                <span>'+d.title+'</span>                                                                       
+                <div  style="margin-top:0.6em;color:#8B8B8E;font-size:0.875em;display:block;font-weight:blod;" >地址：'+d.note+'</div> 
+              </div> 
+            </div>
+            <div class="arrow "></div>                 
+          </div>
+        </div>
     </div>
     <script type="text/javascript" >
        $(document).ready(function(){
