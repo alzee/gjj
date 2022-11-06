@@ -22,6 +22,7 @@
 	</div>        
   #}
 	<div id="accountMny" class="grid-bg-color mar-1-top">
+     <div class='fund_grids' >
      <div class='fund_grid grid-2c'>
        <div class='box box-align-c'>
          <div class='box-f1'>
@@ -88,9 +89,18 @@
          </div>
        </div>
      </div> 
+    </div>   
   </div>   
 
 	<div id="accountInfor" style="margin-top:1em">
+  {% for i in list %}
+    <div class='mdui-input-group fundRow_tip_bg' style='margin-top:0px' >
+      <div class='mdui-input-row' style='font-size:0.9375em'>
+        <div style='txt'>{{i.label}}</div>
+        <div style='color:#8B8B8E' class='box-f1 tx-r'>{{i.value}}</div>
+      </div>
+    </div> 
+  {% endfor %}
   </div> 
 </div>
 <script  type="text/javascript">

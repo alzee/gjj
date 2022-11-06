@@ -11,7 +11,21 @@ class AccountController extends AbstractController
     #[Route('/account', name: 'app_account')]
     public function index(): Response
     {
+        $list = [
+          ['label' => '单位名称', 'value' => 'test'],
+          ['label' => '单位账号', 'value' => 'test'],
+          ['label' => '个人账号', 'value' => 'test'],
+          ['label' => '缴存管理部', 'value' => 'test'],
+          ['label' => '缴存银行', 'value' => 'test'],
+          ['label' => '账户状态', 'value' => 'test'],
+          ['label' => '开户日期', 'value' => 'test'],
+          ['label' => '缴至年月', 'value' => 'test'],
+          ['label' => '绑定银行', 'value' => 'test'],
+          ['label' => '绑定银行卡号', 'value' => 'test'],
+          ['label' => '电子邮箱', 'value' => 'test'],
+        ];
         return $this->render('account/index.html.twig', [
+          'list' => $list
         ]);
     }
 
