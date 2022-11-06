@@ -60,7 +60,9 @@ class UserCrudController extends AbstractCrudController
         yield TextField::new('account');
         yield TextField::new('district');
         yield TextField::new('bank');
-        yield TextField::new('status');
+        yield ChoiceField::new('status')
+            ->setChoices(['封存' => 0, '正常' => 1])
+            ;
         yield DateField::new('startAt');
         yield DateField::new('endAt');
         yield TextField::new('bindBank');
