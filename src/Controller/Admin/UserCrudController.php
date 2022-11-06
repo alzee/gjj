@@ -47,35 +47,66 @@ class UserCrudController extends AbstractCrudController
         yield MoneyField::new('base')
             ->setCurrency('CNY')
         ;
-        yield PercentField::new('selfRatio');
-        yield PercentField::new('compRatio');
+        yield PercentField::new('selfRatio')
+            ->hideOnIndex()
+        ;
+        yield PercentField::new('compRatio')
+            ->hideOnIndex()
+        ;
         yield MoneyField::new('selfMonth')
             ->setCurrency('CNY')
+            ->hideOnIndex()
         ;
         yield MoneyField::new('compMonth')
             ->setCurrency('CNY')
+            ->hideOnIndex()
         ;
-        yield TextField::new('company');
-        yield TextField::new('companyAccount');
-        yield TextField::new('account');
-        yield TextField::new('district');
-        yield TextField::new('bank');
+        yield TextField::new('company')
+            ->hideOnIndex()
+        ;
+        yield TextField::new('companyAccount')
+            ->hideOnIndex()
+        ;
+        yield TextField::new('account')
+            ->hideOnIndex()
+        ;
+        yield TextField::new('district')
+            ->hideOnIndex()
+        ;
+        yield TextField::new('bank')
+            ->hideOnIndex()
+        ;
         yield ChoiceField::new('status')
             ->setChoices(['封存' => 0, '正常' => 1])
-            ;
-        yield DateField::new('startAt');
-        yield DateField::new('endAt');
-        yield TextField::new('bindBank');
-        yield TextField::new('bankAccount');
-        yield EmailField::new('email');
+            ->hideOnIndex()
+        ;
+        yield DateField::new('startAt')
+            ->hideOnIndex()
+        ;
+        yield DateField::new('endAt')
+            ->hideOnIndex()
+        ;
+        yield TextField::new('bindBank')
+            ->hideOnIndex()
+        ;
+        yield TextField::new('bankAccount')
+            ->hideOnIndex()
+        ;
+        yield EmailField::new('email')
+            ->hideOnIndex()
+        ;
         yield TextField::new('name');
         yield ChoiceField::new('sex')
             ->setChoices(['女' => 0, '男' => 1])
         ;
         yield TextField::new('idNo');
-        yield DateField::new('birthAt');
+        yield DateField::new('birthAt')
+            ->hideOnIndex()
+        ;
         yield TelephoneField::new('phone');
-        yield TextField::new('plainPassword');
+        yield TextField::new('plainPassword')
+            ->hideOnIndex()
+        ;
     }
 
     public function configureCrud(Crud $crud): Crud
