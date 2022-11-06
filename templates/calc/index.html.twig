@@ -1,0 +1,336 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}公积金计算器{% endblock %}
+
+{% block body %}
+   	   <style>
+.calcHeader{background:#00A1EA;color:#FFF;font-size: .9375em;padding-top:1em}
+.calcType{font-size: 1.2em} 
+.calcType .white{background: #FFF;color:#00A1EA;border: 1px solid #FFF}
+.calcType .blue{background: #00A1EA;color:#FFF;border: 1px solid #FFF}
+.calcType .left{padding:.5em 2.6em; 
+    -webkit-border-top-left-radius: 0.3em;
+    border-top-left-radius: 0.3em;
+    -webkit-border-bottom-left-radius: 0.3em;
+    border-bottom-left-radius: 0.3em
+}
+.calcType .right{padding:.5em 2.6em;
+-webkit-border-top-right-radius: 0.3em;
+    border-top-right-radius: 0.3em;
+    -webkit-border-bottom-right-radius: 0.3em;
+    border-bottom-right-radius: 0.3em}
+.calcSize{font-size: .8em}
+.font{font-weight: bold}
+.calcHeader .label{width: 6em}
+  </style>
+   	</head>
+<div id="content">
+   <div class="calcHeader">
+      <div class="box box-c calcType "> 
+         <div id="debxlabel" onclick="onchangePayType(0)" class="white left ">çé¢æ¬æ¯</div>
+         <div id="debjlabel" onclick="onchangePayType(1)" class="blue  right">çé¢æ¬é</div>
+      </div>
+      <div class="box box-c tx-c" style="margin: .5em .8em">
+          <div style="width: 55%;" >
+              <div id="mpaydesc0" class="font">æåè¿æ¬¾é¢ï¼å/æï¼</div>
+              <div class="calcSize box box-c" style="padding-left:2em">
+                  <div class="label tx-r">å¬ç§¯éè´·æ¬¾ï¼</div>
+                  <div class="box-f1 tx-l" id="mpay0">0.00</div> 
+              </div>  
+              <div class="calcSize box box-c" style="padding-left:2em" >
+                  <div class="label tx-r">åä¸è´·æ¬¾ï¼</div>
+                  <div class="box-f1 tx-l"  id="mpay1">0.00</div> 
+              </div>   
+          </div>
+          <div id="debj" style="width: 45%;opacity: 0 ">
+              <div id="mpaydjdesc"  class="font">æ¯æéåï¼åï¼</div>
+              <div class="calcSize box box-c " style="padding-left:2em" >
+                  <div class="label tx-r">å¬ç§¯éè´·æ¬¾ï¼</div>
+                  <div class="box-f1 tx-l" id="mpaydj0">0.00</div> 
+              </div> 
+              <div class="calcSize box box-c" style="padding-left:2em" >
+                  <div class="label tx-r">åä¸è´·æ¬¾ï¼</div>
+                  <div class="box-f1 tx-l" id="mpaydj1">0.00</div> 
+              </div>  
+          </div>
+      </div>
+      <div class="box box-c tx-c" style="margin: .0em .8em">
+          <div style="width: 55%;" >
+              <div id="mpaydesc0"  class="font">è¿æ¬¾å©æ¯æ»é¢ï¼å/ï¼</div>
+              <div class="calcSize box box-c" style="padding-left:2em">
+                  <div class="label tx-r">å¬ç§¯éè´·æ¬¾ï¼</div>
+                  <div class="box-f1 tx-l"  id="payratemny0">0.00</div> 
+              </div>  
+              <div class="calcSize box box-c" style="padding-left:2em" >
+                  <div class="label tx-r">åä¸è´·æ¬¾ï¼</div>
+                  <div class="box-f1 tx-l"   id="payratemny1">0.00</div> 
+              </div>   
+          </div>
+          <div style="width: 45%;">
+              <div id="mpaydjdesc"  class="font">è¿æ¬¾æ»é¢ï¼åï¼</div>
+              <div class="calcSize box box-c " style="padding-left:2em" >
+                  <div class="label tx-r">å¬ç§¯éè´·æ¬¾ï¼</div>
+                  <div class="box-f1 tx-l"  id="payallmny0">0.00</div> 
+              </div> 
+              <div class="calcSize box box-c" style="padding-left:2em" >
+                  <div class="label tx-r">åä¸è´·æ¬¾ï¼</div>
+                  <div class="box-f1 tx-l"  id="payallmny1">0.00</div> 
+              </div>  
+          </div>
+      </div>
+   </div> 
+   <div class='fund_rows right-arrow'   >
+       <div class="fund_row" onclick="openWindow(0)">
+          <div class="box-f1" >å¬ç§¯éè´·æ¬¾è¿æ¬¾æç»</div>   
+           <div class='arrow'></div>
+       </div>
+       <div class="fund_row" onclick="openWindow(1)">
+          <div class="box-f1">åä¸è´·æ¬¾è¿æ¬¾æç»</div>   
+           <div class='arrow'></div>
+       </div>
+       <div class="fund_row">
+          <div  class="box-f1">è´·æ¬¾éé¢(ä¸)</div>   
+          <div>
+                <input onclick="onLoanMnYChange(this)" oldValue="" id="loanMoney"  type="number"  class="fund_input calc tx-r"  placeholder="è¯·è¾å¥è´·æ¬¾éé¢" >
+          </div>
+       </div>
+       <div class="fund_row select-arrow">
+          <div  class="box-f1">ææå¹´æ°</div>   
+          <div>
+               <select onchange="loanYearsChange(this)" id="selecty1"  selectedindex="0" class="select" >
+                    <option value="12">1å¹´(12)æ</option>      
+               </select>
+          </div>
+          <div class='arrow'></div>
+       </div>
+       <div class="fund_row select-arrow">
+          <div  class="box-f1">å¬ç§¯éè´·æ¬¾å¹´å©ç(%)</div>   
+          <div>
+               <select onchange="loanRateChange(this)"  id="selectyr1"  selectedindex="0" class="select" >
+                    <option value="2.75">2.75</option>
+                    <option value="3.25">3.25</option>  
+               </select>
+          </div>
+          <div class='arrow'></div>
+       </div>
+       <div class="fund_row select-arrow">
+          <div  class="box-f1">åä¸è´·æ¬¾å¹´å©ç(%)</div>   
+          <div>
+               <select onchange="loanRateChange(this)"  id="selectyr2"  selectedindex="0" class="select" >
+                    <option value="4.75">4.75</option>
+                    <option value="4.9">4.9</option>
+               </select>
+          </div>
+          <div class='arrow'></div>
+       </div>
+   </div>    
+</div>
+<script src="js/init.js"></script>
+<script src="js/layer/layer.js"></script>
+<script src="js/yinhai.js"></script> 
+<script src="js/net.js"></script>
+<script type="text/javascript" >
+        var winH=0; 
+       $(document).ready(function() { 
+            winH=$(window).height();
+            $(".calc").bind('focus',function(){
+                $(this).addClass("calc-bord");   
+            });
+            $(".calc").bind('blur',function(){
+                $(this).removeClass("calc-bord");
+            });
+            $(".calc").bind("input",loanCalc);
+           $("#fdmoney").focus();
+           initData();
+        })  
+        function initData(){
+            var selecty1 = document.getElementById("selecty1");
+             for(var i=1;i <=30;i++){
+                var option = document.createElement("OPTION");
+                var months=i*12;
+                option.text=(i<10?("0"+i):i)+'å¹´('+months+')æ';
+                option.value= months;
+                //if(i==20){ 
+                 //   option.selected=true; 
+                 //   $("#selecty0").text(option.text);
+               // }
+                selecty1.options.add(option);
+                selecty1.onchange();
+            }       
+            
+             $.doSubmit("",{toast:0,"method":"user.getHisRates", "v": "1.0"}, function(data){
+             if(data.list.length>=2){
+                 var list=[] ;
+                 var list2=[] ;
+                for(var i=0;i<2;i++){
+                    obj= data.list[i];
+                    list.push({label:obj.yrate,value:obj.yrate});
+                    list2.push({label:obj.busyrate,value:obj.busyrate});
+                }
+                 createRateSelect(['selectyr1','rate'],list); 
+                 if(list2[0].label){
+                   createRateSelect(['selectyr2','rate2'],list2);
+                 } 
+             }
+           });      
+        }
+        function createRateSelect(ids,obj){
+            var selectyr1 = document.getElementById(ids[0]);
+            for(var i=0;i<obj.length;i++){
+                var option = document.createElement("OPTION");
+                option.text=obj[i].label;
+                option.value= obj[i].value;
+                selectyr1.options[i]=option;
+            }
+            $("#"+ids[1]).val(selectyr1.options[0].value);
+        }
+        //payType=0 çé¢æ¬æ¯ 1 çé¢æ¬é
+        loan={payType:0,loanType:0,money:360000.00,
+            months:24,rate:0.0275/12,payAllMny:0,payAllRate:0,payArgMny:0,mpaydj:0};
+        
+        function loanCalc(){
+            loan.money = $("#loanMoney").val()*10000;
+            if(loan.money<0){
+                loan.money=Math.abs(loan.money);
+                $("#loanMoney").val(loan.money/10000)
+            }
+            loan.rate = $("#selectyr1").val()/12/100;
+            loan.rate = parseFloat(loan.rate.toFixed(7)); 
+            if(loan.rate<0){
+                loan.rate =Math.abs(loan.rate);
+                var rate =loan.rate*12*100;
+                $("#rate").val(rate.toFixed(2))
+            }
+            var debx = calcDebx();
+            var debj = calcDebj();
+            loan.debx=debx;
+            loan.debj=debj;
+            loan.rate  = $("#selectyr2").val()/12/100;
+            loan.rate = parseFloat(loan.rate.toFixed(7)); 
+            var debx1 = calcDebx();
+            var debj1 = calcDebj();
+            loan.debx1=debx1;
+            loan.debj1=debj1;
+            if(loan.payType==0){
+              $("#mpaydesc0").html("æåè¿æ¬¾é¢ï¼å/æï¼"); 
+              $("#payratemny0").text(debx.payAllRate.toFixed(2));  
+              $("#mpay0").text(debx.payArgMny.toFixed(2));
+              $("#payallmny0").text(debx.payAllMny.toFixed(2));
+              $("#payratemny1").text(debx1.payAllRate.toFixed(2));  
+              $("#mpay1").text(debx1.payArgMny.toFixed(2));
+              $("#payallmny1").text(debx1.payAllMny.toFixed(2));
+            }else{
+               $("#mpaydesc0").html("é¦æè¿æ¬¾é¢ï¼åï¼");
+               $("#payratemny0").text(debj.payAllRate.toFixed(2));
+               $("#payallmny0").text(debj.payAllMny.toFixed(2));
+               $("#mpay0").text(debj.firstMpay.toFixed(2));
+               $("#mpaydj0").text(debj.djmoney.toFixed(2));
+               $("#payratemny1").text(debj1.payAllRate.toFixed(2));
+               $("#payallmny1").text(debj1.payAllMny.toFixed(2));
+               $("#mpay1").text(debj1.firstMpay.toFixed(2));
+               $("#mpaydj1").text(debj1.djmoney.toFixed(2));
+            }
+        }
+        function calcDebx(){
+           
+            var payArgMny=(loan.money*loan.rate*Math.pow((1+loan.rate),loan.months))/(Math.pow((1+loan.rate),loan.months)-1);
+            var payAllRate = payArgMny*loan.months-loan.money;         
+            var payAllMony=payArgMny*loan.months;
+            var obj={};         
+            obj.payAllMny=payAllMony;
+            obj.payAllRate=payAllRate;
+            obj.payArgMny=payArgMny;
+            return obj;   
+        }
+        function calcDebj(){
+           
+           var firstpay = loan.money/loan.months;
+          
+           var firstMpay = firstpay+loan.money*loan.rate;
+           var secondPay = firstpay+(loan.money-firstpay)*loan.rate;
+           var djmoney = firstMpay-secondPay;
+           
+           var payAllRate = (loan.months+1)*loan.money*loan.rate/2;
+           var payAllMoney =loan.money+payAllRate;         
+           var obj={}; 
+           obj.payAllMny=payAllMoney;
+           obj.payAllRate=payAllRate;
+           obj.djmoney=djmoney;
+           obj.firstMpay=firstMpay;
+           return obj;
+        }
+        function onchangePayType(obj){   
+           if(obj==0){
+               document.getElementById("debxlabel").className='white left';
+               document.getElementById("debjlabel").className='blue right';
+                $("#debj").css("opacity",0);
+               loan.payType=0;
+           }else{
+               document.getElementById("debxlabel").className='blue left';
+               document.getElementById("debjlabel").className='white right';
+               $("#debj").css("opacity",1);
+               loan.payType=1;
+           }
+           loanCalc();
+        }
+        
+        function openWindow(loanType){ 
+            loan.loanType=loanType;
+            if(loanType==1){
+              loan.rate  = $("#selectyr2").val()/12/100;
+            }else{
+              loan.rate  = $("#selectyr1").val()/12/100;
+            }
+            $.val("calcdetail",loan);
+            $.openWin("calcresult.jsp");
+        }
+        function loanTypeChange(obj){
+            var index =obj.selectedIndex;
+            loan.loanType=parseInt(obj.value);
+            $("#select0").text(obj.options[index].text);
+            adjustRate();
+            loanCalc();
+        } 
+        function adjustRate(){
+          var loanType = document.getElementById("loanType");
+          var selecty1 = document.getElementById("selecty1");
+          var selectyr1 = document.getElementById("selectyr1");
+          var selectyr2 = document.getElementById("selectyr2");
+          if(selecty1.value<=5*12){
+              selectyr1.options[0].selected = true;
+              selectyr2.options[0].selected = true;
+          }else{
+              selectyr1.options[1].selected = true;
+              selectyr2.options[1].selected = true;
+          } 
+          loanRateChange(selectyr1,"rate");
+          loanRateChange(selectyr2,"rate2");
+        }
+        function loanYearsChange(obj){
+            loan.months=parseInt(obj.value);
+            var index= obj.selectedIndex;
+            $("#selecty0").html(obj.options[index].text);
+            adjustRate();
+            loanCalc();
+        }
+        function loanRateChange(obj,rate){
+            $("#"+rate).val(parseFloat(obj.value));
+            loanCalc();
+        }
+        function resetLoaMny(){
+            var obj=$("#loanMoney");
+            var h = $(window).height();
+            if(winH-h<=10){
+                if(obj.val()==""){
+                    obj.val(obj.attr("oldValue"));
+                }
+            }
+        }
+        function onLoanMnYChange(obj){
+            $(obj).attr("oldValue",obj.value);
+            obj.value="";
+            
+            
+        }
+    </script>
+{% endblock %}
