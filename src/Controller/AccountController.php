@@ -11,30 +11,31 @@ class AccountController extends AbstractController
     #[Route('/account', name: 'app_account')]
     public function index(): Response
     {
+        $user = $this->getUser();
         $menus = [
-          ['label' => '缴存余额', 'unit' => '元', 'value' => '123', 'img' => 'wallet'],
-          ['label' => '缴存基数', 'unit' => '元', 'value' => '123', 'img' => 'wallet'],
-          ['label' => '个人缴存比例', 'unit' => '%', 'value' => '123', 'img' => 'percent'],
-          ['label' => '单位缴存比例', 'unit' => '%', 'value' => '123', 'img' => 'percent'],
-          ['label' => '个人月汇缴额', 'unit' => '元', 'value' => '123', 'img' => 'wallet'],
-          ['label' => '单位月汇缴额', 'unit' => '元', 'value' => '123', 'img' => 'wallet'],
+          ['label' => '缴存余额', 'unit' => '元', 'value' => $user->getBalance() / 100, 'img' => 'wallet'],
+          ['label' => '缴存基数', 'unit' => '元', 'value' => $user->getBase()/ 100, 'img' => 'wallet'],
+          ['label' => '个人缴存比例', 'unit' => '%', 'value' => $user->getSelfRatio() * 100, 'img' => 'percent'],
+          ['label' => '单位缴存比例', 'unit' => '%', 'value' => $user->getCompRatio() * 100, 'img' => 'percent'],
+          ['label' => '个人月汇缴额', 'unit' => '元', 'value' => $user->getSelfMonth() / 100, 'img' => 'wallet'],
+          ['label' => '单位月汇缴额', 'unit' => '元', 'value' => $user->getCompMonth() / 100, 'img' => 'wallet'],
         ];
         $list = [
-          ['label' => '单位名称', 'value' => 'test'],
-          ['label' => '单位账号', 'value' => 'test'],
-          ['label' => '个人账号', 'value' => 'test'],
-          ['label' => '缴存管理部', 'value' => 'test'],
-          ['label' => '缴存银行', 'value' => 'test'],
-          ['label' => '账户状态', 'value' => 'test'],
-          ['label' => '开户日期', 'value' => 'test'],
-          ['label' => '缴至年月', 'value' => 'test'],
-          ['label' => '绑定银行', 'value' => 'test'],
-          ['label' => '绑定银行卡号', 'value' => 'test'],
-          ['label' => '电子邮箱', 'value' => 'test'],
+          ['label' => '单位名称', 'value' => $user->getCompany()],
+          ['label' => '单位账号', 'value' => $user->getCompanyAccount()],
+          ['label' => '个人账号', 'value' => $user->getAccount()],
+          ['label' => '缴存管理部', 'value' => $user->getDistrict()],
+          ['label' => '缴存银行', 'value' => $user->getBank()],
+          ['label' => '账户状态', 'value' => $user->getStatus()],
+          ['label' => '开户日期', 'value' => $user->getStartAt()->format('Y-m-d')],
+          ['label' => '缴至年月', 'value' => $user->getEndAt()->format('Y年m月')],
+          ['label' => '绑定银行', 'value' => $user->getBindBank()],
+          ['label' => '绑定银行卡号', 'value' => $user->getBankAccount()],
+          ['label' => '电子邮箱', 'value' => $user->getEmail()],
         ];
         return $this->render('account/index.html.twig', [
           'menus' => $menus,
-          'list' => $list
+          'list' => $list,
         ]);
     }
 
