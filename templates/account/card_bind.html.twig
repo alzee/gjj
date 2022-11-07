@@ -1,6 +1,108 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}贷款信息{% endblock %}
+{% block title %}银行卡绑定{% endblock %}
 
 {% block body %}
+        <style>
+            #calulate {
+                width: 95%;
+                height: 2.2em;
+                line-height: 2.2em;
+                font-size: 1.2em;
+                font-weight: 600;
+            }
+    
+            .right {
+                color: #aaa;
+                margin-right: 1em;
+            }
+    
+            .arrow {
+                color: #aaa;
+            }
+        </style>
+    <div id="content">
+        <div class='fund_rows right-arrow'>
+            <form id="param">
+                <div class="fund_row select-arrow row-item">
+                    <div class="box-f1">个人姓名</div>
+                    <div id="grxm" class="repay-info right"></div>
+                </div>
+                <div class="fund_row select-arrow row-item">
+                    <div class="box-f1">证件类型</div>
+                    <div id="zjlx" class="repay-info right"></div>
+                </div>
+                <div class="fund_row select-arrow row-item">
+                    <div class="box-f1">证件号码</div>
+                    <div id="zjhm" class="repay-info right"></div>
+                </div>
+                <div class="fund_row select-arrow row-item">
+                    <div class="box-f1">手机号码</div>
+                    <div id="sjhm" class="repay-info right"></div>
+                </div>
+                <div class="fund_row select-arrow row-item">
+                    <div class="box-f1">银行名称</div>
+                    <div class="right">
+                        <select id="yhhb" selectedindex="0" class="select">
+                        </select>
+                    </div>
+                    <div class='arrow'></div>
+                </div>
+                <div class="fund_row select-arrow row-item">
+                    <div class="box-f1">银行卡号</div>
+                    <div class="right">
+                        <input style="width:220px;" id="yhkh" type="number" class="fund_input calc tx-r" placeholder="">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div style="margin-top: 30px; margin-bottom: 1.5em; text-align: center; padding: 0 0.5em;">
+            <button class="btnblue" id="calulate" onclick="submitInfo()">提交</button>
+        </div>
+    </div>
+    <script src="js/layer/layer.js"></script>
+    <script src="js/yinhai.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.setLayOut();
+    $.doSubmit("",{"method": "user.getbankinitinfo", "v": "1.0"},function(data){
+    $("#grxm").text(data.grxm);
+    $("#zjlx").text(data.zjlxdesc);
+    $("#zjhm").text(data.zjhm);
+    $("#sjhm").text(data.sjhm);
+                var size = data.banklist.length;
+                if (data.lmkkh){
+                    $("#yhkh").val(data.lmkkh);
+                    $("#yhhb").append("<option value=''>"+data.yhmc+"</option>");
+                    $.toast("您在系统中已存在绑定卡！");
+                    $("#calulate").hide();
+                }else {
+                    for (let i = 0; i < size; i++) {
+                        $("#yhhb").append("<option value='"+data.banklist[i].id+"'>"+data.banklist[i].name+"</option>");
+                    }
+                }
+    },function(data){
+    $.toast(data.resmsg);
+    },function(){
+    $.toast(data.resmsg);
+    });
+        });
+    
+        //提交信息
+        var submitInfo = function () {
+            var yhhb = $("#yhhb").val();
+            var yhkh = $("#yhkh").val();
+            $.doSubmit("param", {"method": "user.bankcardbind", "yhhb": yhhb,"lmkkh":yhkh, "v": "1.0"}, function (data) {
+                if ("1" == date.flag){
+                    $.toast("银行卡绑定成功！");
+                }
+            }, function (data) {
+                $.toast(data.resmsg);
+                return;
+            }, function () {
+                $.toast(data.resmsg);
+                return;
+            });
+        }
+    </script>
 {% endblock %}
