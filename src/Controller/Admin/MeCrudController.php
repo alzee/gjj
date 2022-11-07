@@ -45,7 +45,7 @@ class MeCrudController extends AbstractCrudController
         yield TextField::new('username');
         yield TextField::new('username')
             ->onlyWhenUpdating()
-            ->setDisabled()
+            // ->setDisabled()
             // ->setPermission('ROLE_ADMIN')
         ;
         yield MoneyField::new('balance')
