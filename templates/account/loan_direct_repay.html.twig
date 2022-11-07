@@ -1,6 +1,191 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}贷款信息{% endblock %}
+{% block title %}冲还贷签约{% endblock %}
 
 {% block body %}
+    <style>
+    .fund_row {
+    padding: 0.25rem 0.9375rem 0.1rem;
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    }
+    .right {
+    margin-right: 1em;
+    }
+    .label1{
+    width:9em;
+    }
+    .btnblue{
+    width: 95%;
+    height: 2.2em;
+    line-height: 2.2em;
+    font-size: 1.2em;
+    font-weight: 600;
+    }
+    .select-arrow .arrow:after {
+    content: " ";
+    display: block;
+    -webkit-transform: rotate(135deg);
+    transform: rotate(135deg);
+    height: 0.5em;
+    width: 0.5em;
+    border-width: 2px 2px 0 0;
+    border-color: #888;
+    border-style: solid;
+    position: relative;
+    margin-left: .3em;
+    font-size: 1em;
+    }
+    #d1,#d2,#d3{
+    padding:0.9375rem 0.9375rem 0.9375rem;
+    }
+    </style>
+    <div id="content">
+    <div class='fund_rows right-arrow'>
+    
+    <div id="msgbox" class=" font-5-size box-align-c padding-a " style="color:#8B8B8E;background: #FF9829; display: none;" >
+    <div id="checkmsg"  style="color:#FFF;">&nbsp;</div>
+    </div>
+    <div id="myform1" style="margin-top: 0px" class="mdui-input-group">
+    
+    <div class="fund_row row-item">
+    <div class="label1">个人姓名</div>
+    <input   id="xingming_b"  type="text"  class="tx-r" readonly="readonly" >
+    </div>
+    <div class="fund_row row-item">
+    <div class="label1">证件号码</div>
+    <input id="zjhm_b" name="zjhm" class="tx-r" type="text" readonly="readonly">
+    </div>
+    <div class="fund_row row-item">
+    <div class="label1">还款账号</div>
+    <input id="hkzh" name="hkzj" class="tx-r" type="text" readonly="readonly">
+    </div>
+    <div class="fund_row row-item">
+    <div class="label1">贷款金额</div>
+    <input id="htdkje" name="htdkje" class="tx-r" type="text" readonly="readonly">
+    </div>
+    <div class="fund_row row-item">
+    <div class="label1">最高可用余额</div>
+    <input id="mny" name="mny" class="tx-r" type="text" readonly="readonly">
+    </div>
+    
+    <div id="dsxxh" class="fund_row row-item"  >
+    <div class="label1">冲还顺序</div>
+    <input id="sxxh" name="sxxh" class="tx-r" type="number" placeholder="请输入数字" >
+    </div>
+    <div id="d1" class="fund_row select-arrow row-item">
+    <div class="box-f1">代冲模式</div>
+    <div class="right">
+    <select id="dcms" selectedindex="0" class="select" readonly="readonly" >
+    <option value="01">按月代冲</option>
+    </select>
+    </div>
+    <div class='arrow'></div>
+    </div>
+    <div id="d2" class="fund_row row-item">
+    <div class="label1">协议起始时间</div>
+    <input id="qssj" name="qssj" class="tx-r mdui-listpicker"  data-type="date"  readonly="readonly">
+    </div>
+    <div id="d3" class="fund_row row-item ">
+    <div class="label1">协议结束时间</div>
+    <input id="jssj" name="jssj" class="mdui-listpicker tx-r"  data-type="date" readonly="readonly">
+    </div>
+    <div class="fund_row row-item" style="display: none;">
+    <div class="label1">业务登记号</div>
+    <input id="ywdjh_bb" name="ywdjh_bb" class="tx-r" type="text" readonly="readonly">
+    </div>
+    <div class="fund_row row-item" style="display: none;">
+    <div class="label1">借款合同编号</div>
+    <input id="jkhtbh" name="jkhtbh" class="tx-r" type="text" readonly="readonly">
+    </div>
+    <div class="fund_row row-item" style="display: none;">
+    <div class="label1">受理机构</div>
+    <input id="sljg" name="sljg" class="tx-r" type="text" readonly="readonly">
+    </div>
+    <div style="display: none">
+    <input type="text" id="gllx"/>
+    <input type="text" id="zjlx"/>
+    <input type="text" id="grbh"/>
+    <input type="text" id="ywlxh"/>
+    <input type="text" id="sddkqx" value="0"/>
+    </div>
+    </div>
+    </div>
+    <div id="b1" style="margin-top: 30px; margin-bottom: 1.5em; text-align: center; padding: 0 0.5em; display: none;" >
+    <button class="btnblue"  id="sign" onclick="sign()">签约</button>
+    </div>
+    <div id="b2" style="margin-top: 30px; margin-bottom: 1.5em; text-align: center; padding: 0 0.5em; display: none;">
+    <button class="btnblue" id="cancel" onclick="cancel()">解约</button>
+    </div>
+    </div>
+    <script src="js/layer/layer.js"></script>
+    <script src="js/yinhai.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+            $.doSubmit("", {"method": "user.getPerLoanBaseInfo", "v": "1.0"}, function (data) {
+                $("#xingming_b").val(data.list[0].xingming_b);
+                $("#zjhm_b").val(data.list[0].zjhm_b);
+                $("#hkzh").val(data.list[0].hkzh);
+                $("#htdkje").val(data.list[0].htdkje);
+                $("#ywdjh_bb").val(data.ywdjh_bb);
+                $("#jkhtbh").val(data.list[0].jkhtbh);
+                $("#sljg").val(data.list[0].sljg);
+                $("#mny").val(data.perlist[0].mny);
+                $("#gllx").val(data.perlist[0].gllx);
+                $("#zjlx").val(data.perlist[0].zjlx);
+                $("#grbh").val(data.perlist[0].grbh);
+                if(data.checkMsg == null || data.checkMsg == undefined){//不存在在途
+                    if(data.listAgr == null || data.listAgr == undefined){
+                        //没有签约信息
+                        $("#qssj").val(data.qssj.substring(0,10));
+                       $("#jssj").val(data.jssj.substring(0,10));
+                        $("#b1").show();
+    
+                    }else{
+                        //有签约信息
+                        $("#qssj").val(data.listAgr[0].qssj.substring(0,10));
+                        $("#jssj").val(data.listAgr[0].jssj.substring(0,10));
+                        $("#ywlsh").val(data.listAgr[0].ywlsh);
+                        $("#sxxh").val(data.listAgr[0].sxxh);
+                        $("#sxxh").attr("readonly",true);
+                        $("#b2").show();
+                    }
+    }else{
+                    $("#msgbox").show();
+                    $("#checkmsg").text(data.checkMsg);
+                    $("#qssj").val(data.qssj.substring(0,10));
+                    $("#jssj").val(data.jssj.substring(0,10));
+                    $("#sxxh").val(data.sxxh);
+                    $("#sxxh").attr("readonly",true);
+    }
+    
+            }, function (data) {
+                $.toast(data.resmsg);
+                $.closeWin(this.window);
+            });
+        });
+    //提交签约信息
+    var sign = function () {
+        if($("#sxxh").val().length<=0 || $("#sxxh").val()<=0){
+                $.toast("请输入大于0的数字！");
+                return false;
+    }
+            $.doSubmit("myform1", {"method": "user.sign", "v": "1.0"}, function (data) {
+                $.toast(data.msg);
+                $.closeWin(this.window,2800);
+    });
+    }
+    //提交解约信息
+    var cancel = function () {
+            $.doSubmit("myform1", {"method": "user.cancel", "v": "1.0"}, function (data) {
+                $.toast(data.msg);
+                $.closeWin(this.window,2800);
+            });
+        }
+    </script>
 {% endblock %}
