@@ -1,6 +1,62 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}贷款信息{% endblock %}
+{% block title %}手机号变更{% endblock %}
 
 {% block body %}
+    <div id="content">
+          <div class="box font-5-size box-align-c padding-a " style="color:#8B8B8E;background: #FF9829;" > 
+              <div  style="color:#FFF;">&nbsp;提示：系统将向预留的手机号发送验证码</div>   
+          </div> 
+          <div id="myform" style="margin-top: 0px" class="mdui-input-group">
+             <input type="hidden" name="field"  value="phone"/>
+             <div class="mdui-input-row">
+                 <div class="label">预留手机号</div>
+                 <div class="box-f1">
+                     <div id="phone"></div> 
+                 </div>
+              </div>
+              <div class="mdui-input-row">
+                 <div class="label">新手机号码</div>
+                 <div class="box-f1">
+                     <input id="fieldValue" name="fieldValue" class="weui_input" type="text"   label="手机号"   placeholder="请输入变更手机号码" valid="r,zd[11],zc[11]">
+                 </div>
+              </div>
+              <div class="mdui-input-row">
+                 <div class="label">短信验证码</div>
+                 <div class="box-f1">
+                     <input id="smscode"    name="smscode"     class="weui_input" type="text"  label="短信验证码"   placeholder="请输入验证码"   valid="r,fa_en,zd[6],zc[8]">
+                 </div>
+                 <div>
+                      <button id="yzmbt" onclick="getSMSCode('content','SMS_SJBG')" class="fund_ui_btn fund_ui_btn_mini fund_ui_btn_plain_primary" style="font-size:0.70em">获取短信验证码</button>
+                 </div>
+              </div>
+          </div> 
+          <div class="box mar-all" >
+              <div class="box-f1 mar-all">
+                 <a id="doModifyPhone"  class="fund_ui_btn fund_ui_btn_primary">确定</a>
+              </div>
+          </div>   
+    </div>
+    <script type="text/javascript" >
+       $(document).ready(function(){
+          init();
+       });
+      function init(){
+         var params={"method": "user.checkUserId", "v": "1.0"};
+         $.doSubmit("step_1",params,function(data){
+             $("#phone").text(data.phone);
+         },function(data){
+             $.toast(data.resmsg);
+         }); 
+      }
+      $("#doModifyPhone").bind("click",function(){
+           var params={"method": "user.updatePerInfo", "v": "1.0"};
+           $.doSubmit("myform",params, function(data){  
+                $.toast("手机绑定成功");
+                $.closeWin();
+           }, function(data){
+                $.toast(data.resmsg);
+           });
+      });
+    </script>  
 {% endblock %}
