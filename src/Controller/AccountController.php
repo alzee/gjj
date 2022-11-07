@@ -85,49 +85,49 @@ class AccountController extends AbstractController
     #[Route('/account/loan/direct_repay', name: 'app_loan_direct_repay')]
     public function directRepay(): Response
     {
-        return $this->render('account/no_info.html.twig', [
+        return $this->render('account/loan_direct_repay.html.twig', [
         ]);
     }
 
     #[Route('/account/loan/repay', name: 'app_loan_repay')]
     public function repay(): Response
     {
-        return $this->render('account/no_info.html.twig', [
+        return $this->render('account/loan_repay.html.twig', [
         ]);
     }
 
     #[Route('/account/retire', name: 'app_retire')]
     public function retire(): Response
     {
-        return $this->render('account/no_info.html.twig', [
+        return $this->render('account/retire.html.twig', [
         ]);
     }
 
     #[Route('/account/phone/change', name: 'app_phone_change')]
     public function chPhone(): Response
     {
-        return $this->render('account/no_info.html.twig', [
+        return $this->render('account/phone_change.html.twig', [
         ]);
     }
 
     #[Route('/account/password/reset', name: 'app_password_reset')]
     public function resetPassword(): Response
     {
-        return $this->render('account/no_info.html.twig', [
+        return $this->render('account/password_reset.html.twig', [
         ]);
     }
 
     #[Route('/account/card/bind', name: 'app_card_bind')]
     public function cardBind(): Response
     {
-        return $this->render('account/no_info.html.twig', [
+        return $this->render('account/card_bind.html.twig', [
         ]);
     }
 
     #[Route('/account/msg', name: 'app_msg')]
     public function getMsg(): Response
     {
-        return $this->render('account/no_info.html.twig', [
+        return $this->render('account/msg.html.twig', [
         ]);
     }
 }
