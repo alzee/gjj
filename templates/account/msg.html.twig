@@ -1,6 +1,91 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}贷款信息{% endblock %}
+{% block title %}我的消息{% endblock %}
 
 {% block body %}
+    <style>
+          .row_3_1{width:42%}
+          .row_3_2{width:31%}
+          .row_3_3{width:25%}    
+          .boxStyle{background: #FFF;border:1px solid #F1F1F1;min-height:5em;m;width:90%;border-radius:.4em;padding:.4em .6em }                
+          .boxStyle .line{background:#F1F1F1;height:1px;}
+          .boxStyle #msgContent{margin-top:8px;text-indent: 24px}
+      </style>
+    <div id="content">
+       <div id="msgList" class="mdui-input-group  fundRow_tip_bg"> 
+       </div>
+       <div id="msgBox" style="display: none" >
+          <div class="box box-c mar-1-top"> 
+             <div class="boxStyle">
+                <div id="msgTitle" class="box-f1 tx-c ">  </div>
+                <div id="msgTime"></div>
+                <p class="line"></p>                  
+                <div id="msgContent"></div>                             
+             </div> 
+          </div>
+          <div class="tx-r padding-a">
+              <a  id="backMsgList"  class="fund_ui_btn fund_ui_btn_mini fund_ui_btn_primary">返回</a>
+          </div>  
+       </div>   
+    </div>
+    <div style="display:none">
+       <div id="templ" class="mdui-input-row right-arrow">
+           <div id="msgtitle" class="box-f1"></div>
+           <div id="pubtime"></div>
+           <div class="arrow"></div>
+       </div>  
+    </div>
+    
+    <script type="text/javascript" >
+     [truncated]   var dataList=[];//[{msgno:'332e',msgtitle:"我的消息",msgcontent:"你很懂事鼎飞丹砂 你很懂事鼎飞丹砂 你很懂事鼎飞丹砂 你很懂事鼎飞丹砂 你很懂事鼎飞丹砂","pubtime":'2012-10-10'},{msg
+       $(document).ready(function(){
+          $.setLayOut();
+          fetchData(); 
+          setDataList(dataList); 
+       });
+       
+       function fetchData(){
+           $.doSubmit("",{"method": "user.getMsgList", "v": "1.0"},function(data){
+                  if(data.list&&data.list.length>=1){
+                    dataList = data.list;
+                    setDataList(dataList);
+                  }else{
+                     $.toast("没有最新的消息");
+                     $.closeWin();
+                  }               
+            });
+       }
+       function setDataList(list){
+          var length = list.length; 
+          var msgList = $("#msgList");
+          for(var i=0;i<length;i++){
+              var data =list[i];
+             var c = $("#templ").clone();
+             var ids="#msgtitle,#pubtime";
+             c.find(ids).each(function(index){
+                 var id= this.id; 
+                 var value = data[id];
+                 value = $.dataFormat(value);
+                 $(this).text(value);
+             });
+             c.attr("index",i);
+             c.bind("click",showDetail);
+             msgList.append(c);
+          }
+       } 
+       function showDetail(){
+           var data =dataList[$(this).attr("index")];
+           $("#msgList").hide();
+           $("#msgTitle").text(data.msgtitle);
+           $("#msgTime").text(data.pubtime);
+           $("#msgContent").html(data.msgcontent);
+           $("#msgBox").show();
+           $.doSubmit("",{toast:0,msgId:data.msgno,"method": "user.doReadSingleMsg", "v": "1.0"},function(data){       
+           });
+       } 
+       $("#backMsgList").bind("click",function(){
+           $("#msgList").show();
+           $("#msgBox").hide();
+       });
+    </script>
 {% endblock %}
