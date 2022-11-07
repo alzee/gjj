@@ -1,0 +1,149 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}贷款进度{% endblock %}
+
+{% block body %}
+       <style>
+        .loanbox{;display:-webkit-box;display:box;height:4.5em;padding-left:0.4em}
+        .loanbox .left{font-size:0.875em;height:100%;line-height:5.5em;}
+        
+        .loanbox .info_start{background: url(css/images/0.png) no-repeat ;background-size:11.5em 4.6em;width:11.5em;height:5.5em;}
+        .loanbox .info_start_error{background: url(css/images/011.png) no-repeat ;background-size:11.5em 4.6em;width:11.5em;height:4.5em;}
+        .loanbox .infor_start_wbl{background: url(css/images/02.png) no-repeat ;background-size:11.5em 4.6em;width:11.5em;height:4.5em;}
+        
+        .loanbox .info_end{background: url(css/images/1end.png) no-repeat ;background-size:11.5em 4.6em;width:11.5em;height:4.5em;}
+        .loanbox .info_end_error{background: url(css/images/11end.png) no-repeat ;background-size:11.5em 4.6em;width:11.5em;height:4.5em;}
+        .loanbox .infor_end_wbl{background: url(css/images/2end.png) no-repeat ;background-size:11.5em 4.6em;width:11.5em;height:4.5em;}
+       
+        .loanbox .infor_status{background: url(css/images/1.png) no-repeat ;background-size:11.5em 4.6em;width:11.5em;height:4.5em;}
+        .loanbox .infor_status_error{background: url(css/images/11.png) no-repeat ;background-size:11.5em 4.6em;width:11.5em;height:4.5em;}
+        .loanbox .infor_status_wbl{background: url(css/images/2.png) no-repeat ;background-size:11.5em 4.6em;width:11.5em;height:4.5em;}
+        .loanbox .text-c{font-size:0.811em;line-height:1.24em;color:#FFF;height:100%;padding-top:.955em;padding-bottom:1em;padding-right:1em;padding-left:4em}
+    
+      </style>
+    <div class="mdui-input-group" id="addressList" style="display:none">
+           <div  class="mdui-input-row row-left-line select-arrow">
+               <div id="selectBox" class="box-f1 select">
+                    <select  class="select" onchange="fillData(this.value)" id="address"  name="address">
+                    </select> 
+                </div>
+                <div class="arrow"></div>
+           </div>    
+    </div>
+    <div id="content">
+       
+       <div id="loanAppProcess" class="box box-ver box-c">
+                
+       </div>
+       <div id="msgtip" style="padding-top: 10em">
+           <div class="box box-c">您当前没有贷款信息</div>
+       </div> 
+    </div>
+    
+    <script type="text/javascript" > 
+      $(document).ready(function(){
+          fetchData();
+      })  
+      function fetchData(){
+          $.doSubmit("",{"method": "user.loanstate", "v": "1.0"}, function(data){
+               dataList=data.list; 
+               if(dataList.length==1){
+                   var addressList= $("#addressList").show();
+                   addressList.find("#selectBox").text(dataList[0].address);
+                   addressList.find(".arrow").remove(); 
+                   fillData(0);
+               }else if(dataList.length>=2){
+                   var addressList= $("#addressList").show();
+                   var options="";
+                   for(var i=0;i<dataList.length;i++){
+                       options+="<option value='"+i+"'>"+dataList[i].address+"</option>";
+                   }
+                   addressList.find("select").append(options);
+                   fillData(0);
+               }else if(dataList.length<=0){
+                   $("#msgtip").show();
+                   
+               }
+               $.setLayOut('addressList'); 
+          }, function(data){ 
+              $.toast(data.resmsg);
+          });
+      }  
+      function fillData(index){ 
+         var list=dataList[index].plist||[];
+         var html='';  
+         var status="",cssStatus="",wordh="";
+         if(list&&list.length<1){ 
+             $.toast("无贷款进度信息");
+            
+         }
+        $("#processTitle").show();
+        $("#loanAppProcess").html("");
+        for(var i=0;i<list.length;i++){ 
+            var code = list[i].stepcode;
+            if(list[i].result == '0'){//0正在办理，1审核通过  其他还没办理
+                if(i==0){
+                  cssStatus="info_start_error";
+                }else {
+                  cssStatus= i==(list.length-1)?"info_end_error":"infor_status_error";   
+                } 
+                if(list[i].stepname.indexOf('银行')>-1){
+                  list[i].depname="贷款银行";
+                }else if(list[i].stepname.indexOf('担保')>-1||list[i].stepname.indexOf('抵押')>-1){
+                  list[i].depname ="担保公司";
+                }else{
+                  list[i].depname = list[0].depname;
+                }
+                //status="<br/>状态："+(list[i].depname==null?"":list[i].depname)+"正在办理";
+                status="<br/>"+(list[i].depname==null?"":list[i].depname)+"<br/>正在办理";
+            }else if(list[i].result == '1'){//0正在办理，1审核通过  其他还没办理
+                var stats="";
+                if(code==50||code==51||code==55){
+                   stats ="审核通过"; 
+                }else if(code==65){
+                   stats ="审批通过"; 
+                }else if(code==61){
+                   stats ="已面签"; 
+                }else if(code==62){
+                   stats ="抵押已办理"; 
+                }else if(code==99){
+                   stats ="已发放"; 
+                }else{
+                   stats="审核通过"; 
+                }       
+                //status="<br/>状态："+(list[i].depname==null?"":list[i].depname)+stats;
+                status="<br/>"+(list[i].depname==null?"":list[i].depname)+"<br/>"+stats;
+                if(i==0){
+                  cssStatus="info_start";
+                }else {
+                 cssStatus= i==(list.length-1)?"info_end":"infor_status";
+                }
+            }else{
+                if(list[i].stepname.indexOf('银行')>-1){
+                   list[i].depname="贷款银行";
+                }else if(list[i].stepname.indexOf('担保')>-1||list[i].stepname.indexOf('抵押')>-1){
+                   list[i].depname="担保公司";
+                }else{
+                  list[i].depname = list[0].depname;
+                }
+                //status="<br/>状态："+(list[i].depname==null?"":list[i].depname)+"还未办理";
+                status="<br/>"+(list[i].depname==null?"":list[i].depname)+"<br/>还未办理";
+                wordh="";
+                if(i==0){
+                  cssStatus="infor_start_wbl";
+                }else {
+                  cssStatus= i==(list.length-1)?"infor_end_wbl":"infor_status_wbl";  
+                }
+            }
+           
+            html+='<div class="loanbox">';  
+            html+='   <div class="left ulev-1" style="width:5.6em">'+(list[i].dotime==null?"":list[i].dotime)+'</div>';
+            html+='   <div class="'+cssStatus+'">';
+            html+='       <div style="'+wordh+'" class="text-c " >'+list[i].stepname+status+'</div>';
+            html+='   </div>';
+            html+='</div>';  
+        }
+        $("#loanAppProcess").html(html);
+      }
+    </script>  
+{% endblock %}

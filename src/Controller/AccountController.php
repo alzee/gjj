@@ -78,7 +78,7 @@ class AccountController extends AbstractController
     #[Route('/account/loan/progress', name: 'app_loan_progress')]
     public function getLoanProgress(): Response
     {
-        return $this->render('account/no_info.html.twig', [
+        return $this->render('account/loan_progress.html.twig', [
         ]);
     }
 
