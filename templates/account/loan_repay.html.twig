@@ -1,6 +1,486 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}贷款信息{% endblock %}
+{% block title %}提前还款{% endblock %}
 
 {% block body %}
+    <style>
+    #calulate {
+    width: 95%;
+    height: 2.2em;
+    line-height: 2.2em;
+    font-size: 1.2em;
+    font-weight: 600;
+    }
+    
+    .right { color: #aaa; margin-right: 1em; }
+    .arrow { color: #aaa; }
+    </style>
+    <div id="content">
+    <div class='fund_rows right-arrow'>
+    <form id="param">
+    <div class="fund_row" onclick="openWindow('1')">
+    <div class="box-f1">贷款基本信息</div>
+    <div class='arrow'></div>
+    </div>
+
+    <!-- <div class="fund_row">
+    <div class="box-f1" style="font-size: 1em">提前还款信息</div>
+    </div> -->
+    <div class="fund_row select-arrow row-item">
+    <div class="box-f1">还款类型</div>
+    <div class="right">
+    <select id="selectyr1" selectedindex="0" class="select" onchange="repayTypeChange()">
+    <option value="3">提前部分还款</option>
+    <option value="4">提前全部还款</option>
+    </select>
+    </div>
+    <div class='arrow'></div>
+    </div>
+                    <div id="msgdiv1" class="fund_row row-item" style="display: none">
+    <div class="right" style="color: red;">
+                            提前部分还款须注意：1.应还本金必须为千元的整数倍;2.每笔贷款每人每年只限办理一次;3.做完提前还款业务，公积金账户余额需至少保留3个月的月还款额。
+    </div>
+    </div>
+    <div class="fund_row select-arrow row-item">
+    <div class="box-f1">还款途径</div>
+    <div class="right">
+    <select onchange="checkmonry()" id="hktj" selectedindex="0" class="select">
+    
+    <option value="3">公积金冲还贷</option>
+    </select>
+    </div>
+    <div class='arrow'></div>
+    </div>
+    <!-- <div class="fund_row select-arrow row-item" style="display: none" id="expdate-container">
+    <div class="box-f1">预计还款时间</div>
+    <div class="right">
+    <input type="date" id="expdate" class="fund_input calc tx-r">
+    </div>
+    <div class='arrow'></div>
+    </div> -->
+    <div class="fund_row select-arrow row-item all-hide">
+    <div class="box-f1">变更方式</div>
+    <div class="right">
+    <select onchange="bgfsChange()" id="hkbgfs" selectedindex="0" class="select">
+    <option value="1">减少月还款额</option>
+    <!-- <option value="2">缩短贷款期限</option> -->
+    </select>
+    </div>
+    <div class='arrow'></div>
+    </div>
+    <div class="fund_row">
+       <div  class="box-f1">还款本金</div>   
+       <div class="right">
+             <input onchange="checkPayMny()" style="width:220px;" oldValue="" id="hkbj"  type="number"  class="fund_input calc tx-r"  placeholder="" >
+       </div>
+    </div>
+    
+    <div class="fund_row row-item">
+    <div class="box-f1">还款利息</div>
+    <div id="hklx" class="repay-info right"></div>
+    </div>
+    <div class="fund_row row-item">
+    <div class="box-f1">还款本息合计</div>
+    <div id="hkbxhj" class="repay-info right"></div>
+    </div>
+                    <div id="msgdiv2" class="fund_row row-item" style="display: none">
+                        <div class="right" style="color: red;">
+                            注意：提前部分还款账户可用金额 = 账户余额 - 3*月还款额
+                        </div>
+                    </div>
+    <div class="fund_row row-item">
+    <div  class="box-f1">账户可用金额</div>
+    <div class="right">
+    <input id="zhkyje" style="width:220px;" oldValue="" type="number" readonly="readonly" class="fund_input calc tx-r" placeholder="" >
+    </div>
+    </div>
+    <div class="fund_row row-item">
+    <div  class="box-f1">账户使用金额</div>
+    <div class="right">
+    <input onchange="calcuXjje()" style="width:220px;" oldValue="" id="zhsyje"  type="number"  class="fund_input calc tx-r"  placeholder="" >
+    </div>
+    </div>
+    <div id="hkkhdiv" class="fund_row row-item" style="display: none">
+    <div  class="box-f1">还款卡号</div>
+    <div id="hkkh" class="right">
+    </div>
+    </div>
+    <div id="xjjediv" class="fund_row row-item" style="display: none">
+    <div  class="box-f1">还款卡扣款金额</div>
+    <div id="xjje" class="right">
+    </div>
+    </div>
+    <div class="fund_row row-item all-hide" id="bgyhke-container">
+    <div class="box-f1">变更后月还款额</div>
+    <div id="bgyhke"  class="repay-info right"></div>
+    </div>
+    <div class="fund_row row-item all-hide" id="bgyhbj-container">
+    <div class="box-f1" id="bgyhbj-label">月还款本金</div>
+    <div id="bgyhbj"  class="repay-info right"></div>
+    </div>
+    <div class="fund_row row-item all-hide">
+    <div class="box-f1">变更后贷款期限</div>
+    <div id="bgdkqx"  class="repay-info right"></div>
+    </div>
+    <div class="fund_row row-item  all-hide"  id="bgsyqx-container">
+    <div class="box-f1">变更后剩余期限</div>
+    <div id="bgsyqx"  class="repay-info right"></div>
+    </div>
+    <div style="display: none">
+    <input type="text" id="loancardcode"/>
+    <input type="text" id="owemny"/>
+    <input type="text" id="yhke"/>
+    <input type="text" id="oweratemny"/>
+    <input type="text" id="owepunishmny"/>
+    <input type="text" id="paytotal"/>
+    <input type="text" id="sydkqs"/>
+    <input type="text" id="phone"/>
+    <input type="text" id="userid"/>
+    <input type="text" id="hkzhzjhm"/>
+    <input type="text" id="yhfksj"/>
+    <input type="text" id="fetchCheck"/>
+    <input type="text" id="depcode"/>
+    </div>
+    </form>
+    </div>
+    <div style="margin-top: 30px; margin-bottom: 1.5em; text-align: center; padding: 0 0.5em;">
+    <button class="btnblue" id="calulate" onclick="submitTqhkInfo()">提交</button>
+    </div>
+    </div>
+    <script src="js/layer/layer.js"></script>
+    <script src="js/yinhai.js"></script>
+    <script type="text/javascript">
+    var grzhye, loanbal, repayway; //个人账户余额   账户剩余贷款   还款方式 :01等额本息 02等额本金
+    $(document).ready(function(){
+        $.setLayOut();
+    $.doSubmit("",{"method": "user.queryPerLoanAccount", "tqhk": "1", "v": "1.0"},function(data){
+    grzhye = data.list[0].grzhye;
+    loanbal = data.list[0].loanbal;
+    repayway = data.list[0].repayway;
+    $("#loancardcode").val(data.list[0].loancardcode);
+    $("#owemny").val(data.list[0].owemny);
+    $("#yhke").val(data.list[0].yhke);
+    $("#oweratemny").val(data.list[0].oweratemny);
+    $("#owepunishmny").val(data.list[0].owepunishmny);
+    $("#userid").val(data.list[0].zjhm);
+    $("#phone").val(data.list[0].phone);
+    $("#hkzhzjhm").val(data.list[0].hkzhzjhm);
+    $("#yhfksj").val(data.list[0].yhfksj);
+    $("#hkbj").attr("placeholder","还款金额只能为1000的整数倍");
+    // $("#fetchCheck").val(data.list[1].fetchCheck);
+    $("#depcode").val(data.list[0].depcode);
+                    $("#zhye").val(grzhye);
+    var grzhye1 = parseFloat(grzhye);
+    var zhblje = parseFloat("10.00");//账户保留金额
+                    // $("#zhkyje").text(grzhye1-zhblje);
+                    $("#zhkyje").val(grzhye1-zhblje);
+    $("#hkkh").text(data.list[0].payacccode);
+    var glgx = data.list[0].glgx;
+    if ('01' == glgx){
+    $("#hktj").append("<option value='2'>组合扣款</option>");
+    $("#hktj").val(2);
+    }
+    $("#selectyr1").val(4);
+    repayTypeChange();
+    queryPerAccState();
+    },function(data){
+        $.toast(data.resmsg);
+    },function(){
+        $.toast(data.resmsg);
+    });
+       });
+    
+    
+    //获取url参数函数
+    var getUrlParam = function (name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r != null) return unescape(r[2]); return null; //返回参数值
+    }
+    
+    //更改公积金扣款金额同步调整银行卡扣款金额
+    var calcuXjje = function (){
+    var hkfs = $("#hktj").val();
+    var paytotal = parseFloat($("#hkbj").val()) + parseFloat($("#hklx").text());
+    var zhkyje = parseFloat($("#zhkyje").val());
+    var zhsyje = parseFloat($("#zhsyje").val());
+    if (zhsyje>zhkyje){
+    $.toast("账户使用金额不能高于账户可用金额！");
+    $("#zhsyje").val("");
+    return;
+    }
+    if ('2' == hkfs){
+    if (paytotal>=zhsyje){
+    $("#xjje").text(parseFloat(paytotal-zhsyje).toFixed(2));
+    $.toast("请确保还款卡中有足够可用金额，否则将扣款失败!");
+    }else {
+    $.toast("账户使用金额不能高于扣款总金额金额！");
+    $("#zhsyje").val(paytotal)
+    $("#xjje").text(0);
+    }
+    }
+    // if ('3' == hkfs){
+    // if (paytotal>zhsyje){
+    // Base.setValue("xjje",paytotal-zhsyje);
+    // }else {
+    // Base.msgTopTip("账户使用金额不能高于扣款总金额金额！");
+    // Base.setValue("zhsyje",paytotal);
+    // Base.setValue("xjje",0);
+    // }
+    // }
+    }
+    
+    var openWindow = function (data) {
+    if("1" == data) {
+    $.openWin("perloanAcct.jsp");
+    }
+    if("2" == data) {
+    $.openWin("tqhk-borrower-account.jsp");
+    }
+    
+    }
+    
+    //还款类型改变触发
+    var repayTypeChange = function () {
+    var repay_type = $("#selectyr1").val();
+    $("#zhye").text(grzhye);
+    if('3' == repay_type) {
+    $(".all-hide").show();
+    $(".repay-info").text("");
+    $("#hkbj").removeAttr("readonly", "readonly");
+    $("#hkbj").val("");
+    $("#msgdiv1").show();
+    $("#msgdiv2").show();
+    var yhke = parseFloat($("#yhke").val()).toFixed(2);
+    $("#zhkyje").val(parseFloat(grzhye-yhke*3).toFixed(2));
+    }
+    if('4' == repay_type) {
+    $(".all-hide").hide();
+    $("#hkbj").attr("readonly", "readonly");
+    $("#hkbj").val(loanbal);
+    checkPayMny();
+    $("#msgdiv1").hide();
+    $("#msgdiv2").hide();
+    }
+    }
+    
+    //提前还款验证个人账户状态
+    var queryPerAccState = function () {
+    $.doSubmit("",{"method": "user.queryPerAccState","v": "1.0"},function(data){
+    if ('02' == data.accstate){
+    $("#calulate").hide();
+    $.toast('因您的公积金账户为封存状态，请到柜面查询后办理！');
+    }
+    },function(data){
+    $.toast(data.resmsg);
+    },function(data){
+    $.toast(data.resmsg);
+    });
+    }
+    
+    //初始化个人账户余额、还款利息、本息合计等等 当还款类型和还款本金发生变化时触发此函数
+    var checkPayMny = function () {
+    var paymny, payratemny, prepaytype; //还款本金  还款利息 还款类型
+    paymny = $("#hkbj").val();
+    fetchCheck = $("#fetchCheck").val();
+    if (grzhye !="" || grzhye != "0.00"){
+    $("#zhye").val((grzhye-0.01).toFixed(2));
+    }
+    if(parseInt(paymny) > parseInt(loanbal)) {
+    $.toast("还款本金不能大于贷款余额！");
+    $("#hkbj").val("");
+    return false;
+    }
+    
+    prepaytype = $("#selectyr1").val();
+    if (prepaytype == "3") {
+    if( parseInt(paymny) % 1000 == 0) {
+    $.doSubmit("hkbj,loancardcode",{"method": "user.getPrepayRate", "v": "1.0"},function(data){
+    payratemny = data.payratemny;
+    $("#hklx").text(payratemny);
+    if(payratemny != "" && paymny != ""){
+    $("#hkbxhj").text(parseFloat(payratemny) + parseFloat(paymny));
+    $("#paytotal").val(parseFloat(payratemny) + parseFloat(paymny));
+    }
+    var yhke = parseFloat($("#yhke").val()).toFixed(2);
+    $("#zhkyje").val(parseFloat(grzhye-yhke*3).toFixed(2));
+    bgfsChange();
+    checkmonry();
+    },function(data){
+        $.toast(data.resmsg);
+    },function(){
+        $.toast(data.resmsg);
+    });
+    } else {
+    $.toast("还款金额只能为1000的整数倍");
+    $("#hkbj").val("");
+    return false;
+    }
+    }else{
+    $.doSubmit("hkbj,loancardcode",{"method": "user.getPrepayRate", "v": "1.0"},function(data){
+    payratemny = data.payratemny;
+    $("#hklx").text(payratemny);
+    if(payratemny != "" && paymny != ""){
+    var hkze1 = parseFloat(payratemny) + parseFloat(paymny);
+    var hkze2 = hkze1.toString().match(/^\d+(?:\.\d{0,2})?/);
+    $("#hkbxhj").text(hkze2);
+    $("#paytotal").val(hkze2);
+    }
+    /*hkrchick(); */
+    var zhblje = parseFloat("10.00");//账户保留金额
+    $("#zhkyje").val(parseFloat(grzhye-zhblje).toFixed(2));
+    checkmonry();
+    },function(data){
+        $.toast(data.resmsg);
+    },function(){
+        $.toast(data.resmsg);
+    });
+    }
+    }
+    
+    //判断可用金额是否大于应还本金
+    var checkmonry = function () {
+    var paymentyway = $("#hktj").val();
+    var paymny = $("#hkbj").val();
+    if(paymentyway == "3"){
+    $("#hkkhdiv").hide();
+    $("#xjjediv").hide();
+    $("#expdate-container").hide();
+    $("#expdate").attr("disabled", "disabled");
+    $("#expdate").val("");
+    var hkbxhj = $("#hkbxhj").text();
+    var zhkyje = $("#zhkyje").val();
+    if(parseInt(hkbxhj) > parseInt(zhkyje)){
+    $.dialog({title: "", content: "账户可用金额不足，请修改还款类型或还款途径!", mode: 1}, function (index) {
+    $("#calulate").attr("disabled", "disabled");
+    $("#hkbj").val("");
+    $("#hklx").text("");
+    $("#hkbxhj").text("");
+    $("#bgyhke").text("");
+    $("#bgdkqx").val("");
+    $("#zhsyje").val("");
+    return false;
+    });
+    }
+    if (hkbxhj && parseInt(hkbxhj) <= parseInt(zhkyje)){
+    $("#zhsyje").val($("#hkbxhj").text());
+    }
+    $("#calulate").removeAttr("disabled", "disabled");
+    return true;
+    } else {
+    $("#expdate-container").show();
+    $("#expdate").removeAttr("disabled", "disabled");
+    $("#calulate").removeAttr("disabled", "disabled");
+    }
+    if (paymentyway == "2"){
+    $("#hkkhdiv").show();
+    $("#xjjediv").show();
+    }
+    }
+    
+    //变更方式改变触发此函数
+    var bgfsChange = function () {
+    var chgtype = $("#hkbgfs").val(); //变更方式 1.减少月还款额 2.缩短期限
+    var paymny = $("#hkbj").val();
+    if('1' == chgtype) {
+    $("#bgyhbj-container, #bgsyqx-container").hide();
+    $("#bgyhke-container").show();
+    } else {
+    $("#bgyhbj-container, #bgsyqx-container").show();
+    $("#bgyhke-container").hide();
+    if("等额本息" == repayway) {
+    $("#bgyhbj-label").text("月还款金额");
+    }
+    }
+    if(paymny == ""){
+    $.toast("请先填写还款金额!");
+    return;
+    }
+    $.doSubmit("param",{"method": "user.getLoanInfo", "v": "1.0"},function(data){
+    $("#bgyhke").text(data.changepayments);
+    $("#bgdkqx").text(data.changelimit);
+    $("#bgsyqx").text(data.sydkqs);
+    $("#sydkqs").text(data.sydkqs);
+    $("#bgyhbj").text(data.yyhke);
+    
+    },function(data){
+        $.toast(data.resmsg);
+    },function(){
+        $.toast(data.resmsg);
+    });
+    }
+    
+    //提交提前还款信息
+    var submitTqhkInfo = function () {
+    //$.openWin("tqhk-message-validate.html");短信功能暂时屏蔽
+    var today = new Date();
+    if(today.getDate() < 10) {
+    today = '0'+ today.getDate(); //补齐两位格式
+            }else{
+            today = today.getDate();
+            }
+    var yhfksj = $("#yhfksj").val(); //银行放款时间
+    var yhfkrq = yhfksj.substr(yhfksj.length - 2); //银行放款日
+    if(yhfkrq == today) {
+    $.toast("今天为您的约定还款日，不能办理提前还款!");
+    return;
+    } 
+    if($('' == "#loancardcode").val()) {
+    $.toast("贷款账号为空，不能办理提前还款!");
+    return;
+    } 
+    if($('' == "#phone").val()) {
+    $.toast("您未绑定手机号码，请前往营业厅办理！");
+    return;
+    }
+    // if('2' == $("#hktj").val() && $("#hkzhzjhm").val() != $("#userid").val()) {
+    // $.toast("非本人绑定银行还款账户，不能办理此业务！");
+    // return;
+    // }
+    if('' == $("#hkbj").val() || '' == $("#selectyr1").val() || '' == $("#hktj").val()) {
+    $.toast("请填写完提取还款信息再提交！");
+    return;
+    }
+    if(3 == $("#selectyr1").val() && '' == $("#hkbgfs").val() ) {
+    $.toast("请填写完提取还款信息再提交！");
+    return;
+    }
+    if(4 == $("#hktj").val() && '' == $("#expdate").val() ){
+    $.toast("预计还款时间不能为空！");
+    return;
+    }
+    var depcode = $("#depcode").val();
+    var yhkkkje = 0;
+    if ('2' == $("#hktj").val()){
+    yhkkkje = $("#xjje").text();
+    }
+    var repay_type = $("#selectyr1").val();
+    if ('3' == repay_type){
+    var r = confirm("提前部分还款每笔贷款每人每年只限办理一次，请确认是否继续?");
+    if (r){
+    $.doSubmit("param", {"method": "user.repaySave", "depcode": depcode,"yhkkkje": yhkkkje, "v": "1.0"}, function(data) {
+    $.toast("提前还款办理成功,如您贷款结清后，请到中心柜台打印贷款结清证明，后凭此证明到担保公司办理解押手续。");
+    $("#calulate").attr("disabled", "disabled");
+    },function(data){
+    $.toast(data.resmsg);
+    return;
+    },function(){
+    $.toast(data.resmsg);
+    return;
+    });
+    }
+    }else {
+    $.doSubmit("param", {"method": "user.repaySave", "depcode": depcode,"yhkkkje": yhkkkje, "v": "1.0"}, function(data) {
+    $.toast("提前还款办理成功,如您贷款结清后，请到中心柜台打印贷款结清证明，后凭此证明到担保公司办理解押手续。");
+    $("#calulate").attr("disabled", "disabled");
+    },function(data){
+    $.toast(data.resmsg);
+    return;
+    },function(){
+    $.toast(data.resmsg);
+    return;
+    });
+    }
+    }
+    </script>
 {% endblock %}
